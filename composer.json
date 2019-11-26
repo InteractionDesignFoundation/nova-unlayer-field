@@ -1,0 +1,29 @@
+{
+    "name": "idf/nova-unlayer-field",
+    "description": "A Laravel Nova field for Unlayer to compose emails and landing pages",
+    "keywords": [
+        "laravel",
+        "nova"
+    ],
+    "license": "MIT",
+    "require": {
+        "php": ">=7.1.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "IDF\\NovaUnlayerField\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "IDF\\NovaUnlayerField\\ServiceProvider"
+            ]
+        }
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
