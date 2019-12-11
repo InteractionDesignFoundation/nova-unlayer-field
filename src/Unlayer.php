@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Laravel\Nova\Fields\Code;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
-final class Unlayer extends Code
+class Unlayer extends Code
 {
     /**
      * The field's component.
@@ -14,20 +14,8 @@ final class Unlayer extends Code
      */
     public $component = 'nova-unlayer-field';
 
-    /**
-     * Indicates if the field is used to manipulate JSON.
-     * @var bool
-     */
-    public $json = true;
-
     /** @var callable|null */
     public $savingCallback;
-
-    /**
-     * Indicates if the element should be shown on the index view.
-     * @var bool
-     */
-    public $showOnDetail = false;
 
     /**
      * Specify Unlayer config
@@ -41,7 +29,10 @@ final class Unlayer extends Code
             ? $config()
             : $config;
 
-        return $this->withMeta(['config' => $unlayerConfig]);
+        return $this->withMeta([
+            'config' => $unlayerConfig,
+            'html' => '',
+        ]);
     }
 
     public function savingCallback(?callable $callback): Unlayer
@@ -59,6 +50,20 @@ final class Unlayer extends Code
     public function height(string $height): Unlayer
     {
         return $this->withMeta(['height' => $height]);
+    }
+
+    /**
+     * Set generated HTML code that can be used on details page.
+     * @param $html
+     * @return \IDF\NovaUnlayerField\Unlayer
+     */
+    public function html($html): Unlayer
+    {
+        $html = is_callable($html)
+            ? $html()
+            : $html;
+
+        return $this->withMeta(['html' => $html]);
     }
 
     /**
