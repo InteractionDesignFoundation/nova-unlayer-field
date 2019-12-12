@@ -56,7 +56,7 @@
              * Set the initial, internal value for the field.
              */
             setInitialValue() {
-                this.value = JSON.parse(this.field.value) || {};
+                this.value = this.field.value ? JSON.parse(this.field.value) : {};
             },
 
             /**
