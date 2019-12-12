@@ -2,7 +2,7 @@
     <panel-item :field="field">
         <template slot="value">
             <div class="overflow-hidden">
-                <iframe :id="iframeId" sandbox="allow-scripts" importance="low" width="100%"></iframe>
+                <iframe :id="iframeId" sandbox="allow-scripts allow-same-origin" importance="low" width="100%"></iframe>
             </div>
         </template>
     </panel-item>
