@@ -1,13 +1,15 @@
 <template>
     <default-field :field="field" :errors="errors" :full-width-content="true">
         <template slot="field">
-            <button
-                    id="fullscreenToggleButton"
-                    class="text-xs bg-90 hover:bg-black text-white font-semibold rounded-sm px-4 py-1 m-1 border"
-                    @click="toggleFullscreen"
-                    type="button">
-                ▶ Enter fullscreen
-            </button>
+            <div class="controls">
+                <button
+                        id="fullscreenToggleButton"
+                        class="text-xs bg-90 hover:bg-black text-white font-semibold rounded-sm px-4 py-1 m-1 border"
+                        @click="toggleFullscreen"
+                        type="button">
+                    ▶ Enter fullscreen
+                </button>
+            </div>
             <div :id=containerId :style="{height: field.height || '800px'}"></div>
             <p v-if="hasError" class="my-2 text-danger">
                 {{ firstError }}
@@ -37,13 +39,15 @@
         methods: {
             toggleFullscreen() {
                 document.body.classList.toggle('overflow-hidden');
-                const container = document.getElementById(`${this.containerId}`);
-                container.classList.toggle('z-50');
-                container.classList.toggle('fullscreen');
+                const unlayerContainer = document.getElementById(`${this.containerId}`);
+                unlayerContainer.classList.toggle('z-50');
+                unlayerContainer.classList.toggle('fullscreen');
 
-                const toggleButton = document.querySelector(`#fullscreenToggleButton`);
-                toggleButton.classList.toggle('stickyControl');
-                container.classList.contains('fullscreen')
+                const controls = document.querySelector('.controls');
+                controls.classList.toggle('stickyControls');
+
+                const toggleButton = controls.querySelector(`#fullscreenToggleButton`);
+                unlayerContainer.classList.contains('fullscreen')
                     ? toggleButton.innerText = '✖︎ Exit fullscreen'
                     : toggleButton.innerText = '▶ Enter fullscreen';
             },
@@ -131,7 +135,7 @@
         height: 98vh !important;
     }
 
-    .stickyControl {
+    .stickyControls {
         position: fixed;
         left: 1vw;
         top: 1vh;
