@@ -10,7 +10,7 @@
                     {{ fullscreenButtonText.on }}
                 </button>
             </div>
-            <div :id=containerId :style="{height: field.height || '800px'}"></div>
+            <div :id=containerId :style="{height: field.height || '800px'}" class="form-input-bordered"></div>
             <p v-if="hasError" class="my-2 text-danger">
                 {{ firstError }}
             </p>
