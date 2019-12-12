@@ -7,7 +7,7 @@
 
 Adds a Laravel Nova field for Unlayer to compose emails and landing pages.
 
-![image](https://p9.f1.n0.cdn.getcloudapp.com/items/04ugg6gN/Screen+Recording+2019-12-12+at+21.02.gif?v=f87d79deb34d097fbd890e933823a2f5)
+![image](https://s5.gifyu.com/images/unlayer.gif)
 
 ## Installation
 
