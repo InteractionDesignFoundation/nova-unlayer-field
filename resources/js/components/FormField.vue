@@ -61,7 +61,7 @@
                     : toggleButton.innerText = this.fullscreenButtonText.on;
             },
 
-            /*
+            /**
              * Set the initial, internal value for the field.
              */
             setInitialValue() {
@@ -93,6 +93,10 @@
                 unlayerScript.onload = onLoadCallback;
                 document.head.appendChild(unlayerScript);
             },
+
+            /**
+             * Init unlayer editor and add event listeners
+             */
             initEditor() {
                 const unlayerConfig = this.field.config;
                 unlayerConfig.id = this.containerId;
