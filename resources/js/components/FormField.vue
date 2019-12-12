@@ -1,13 +1,13 @@
 <template>
     <default-field :field="field" :errors="errors" :full-width-content="true">
         <template slot="field">
-            <div class="controls">
+            <div class="unlayerControls flex">
                 <button
                         id="fullscreenToggleButton"
                         class="text-xs bg-90 hover:bg-black text-white font-semibold rounded-sm px-4 py-1 m-1 border"
                         @click="toggleFullscreen"
                         type="button">
-                    ▶ Enter fullscreen
+                    {{ fullscreenButtonText.on }}
                 </button>
             </div>
             <div :id=containerId :style="{height: field.height || '800px'}"></div>
@@ -26,6 +26,13 @@
 
         props: ['resourceName', 'resourceId', 'field'],
 
+        data: () => ({
+            fullscreenButtonText: {
+                on: '▶ Enter fullscreen',
+                off: '✖︎ Exit fullscreen',
+            },
+        }),
+
         created() {
             this.injectUnlayerScript(this.initEditor);
         },
@@ -38,18 +45,20 @@
 
         methods: {
             toggleFullscreen() {
+                // toggle scrolling of the page
                 document.body.classList.toggle('overflow-hidden');
-                const unlayerContainer = document.getElementById(`${this.containerId}`);
-                unlayerContainer.classList.toggle('z-50');
-                unlayerContainer.classList.toggle('fullscreen');
 
-                const controls = document.querySelector('.controls');
+                const unlayerEditorContainer = this.$el.querySelector(`#${this.containerId}`);
+                unlayerEditorContainer.classList.toggle('z-50');
+                unlayerEditorContainer.classList.toggle('fullscreen');
+
+                const controls = this.$el.querySelector('.unlayerControls');
                 controls.classList.toggle('stickyControls');
 
                 const toggleButton = controls.querySelector(`#fullscreenToggleButton`);
-                unlayerContainer.classList.contains('fullscreen')
-                    ? toggleButton.innerText = '✖︎ Exit fullscreen'
-                    : toggleButton.innerText = '▶ Enter fullscreen';
+                unlayerEditorContainer.classList.contains('fullscreen')
+                    ? toggleButton.innerText = this.fullscreenButtonText.off
+                    : toggleButton.innerText = this.fullscreenButtonText.on;
             },
 
             /*
