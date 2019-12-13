@@ -4,7 +4,7 @@
             <div class="unlayerControls flex">
                 <button
                         id="fullscreenToggleButton"
-                        class="text-xs bg-90 hover:bg-black text-white font-semibold rounded-sm px-4 py-1 m-1 border"
+                        class="text-xs bg-90 hover:bg-black text-white font-semibold rounded-sm px-4 py-1 m-1 form-input-bordered"
                         @click="toggleFullscreen"
                         type="button">
                     {{ fullscreenButtonText.on }}
@@ -112,14 +112,21 @@
                     window.unlayer.loadDesign(this.value);
                 }
 
+                /** @see https://docs.unlayer.com/docs/events */
                 window.unlayer.addEventListener('design:loaded', this.designLoaded);
                 window.unlayer.addEventListener('design:updated', this.designUpdated);
+                window.unlayer.addEventListener('onImageUpload', this.imageUpload);
             },
 
             /**
              * @param {{design: Object}} loadedDesign
              */
             designLoaded(loadedDesign) {
+                Nova.$emit('unlayer:design:loaded', {
+                    inputName: this.field.attribute,
+                    payload: loadedDesign,
+                });
+
                 window.unlayer.exportHtml((editorData) => {
                     this.finalHtml = editorData.html;
                     this.value = editorData.design;
@@ -130,9 +137,36 @@
              * @param {{item: Object, type: string}} changeLog
              */
             designUpdated(changeLog) {
+                Nova.$emit('unlayer:design:updated', {
+                    inputName: this.field.attribute,
+                    payload: changeLog,
+                });
+
+                this.exportHtml();
+            },
+
+            /**
+             * Build HTML based on current JSON config
+             */
+            exportHtml() {
                 window.unlayer.exportHtml((editorData) => {
                     this.finalHtml = editorData.html;
                     this.value = editorData.design;
+
+                    Nova.$emit('unlayer:html:exported', {
+                        inputName: this.field.attribute,
+                        payload: editorData,
+                    });
+                });
+            },
+
+            /**
+             * @param {Object} imageData
+             */
+            imageUpload(imageData) {
+                Nova.$emit('unlayer:image:uploaded', {
+                    inputName: this.field.attribute,
+                    payload: imageData,
                 });
             },
         },
