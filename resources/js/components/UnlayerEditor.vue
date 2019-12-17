@@ -1,5 +1,5 @@
 <template>
-    <div id="editor" class="flex" :style="{ minHeight: minHeight }"></div>
+    <div :id=id class="flex" :style="{ minHeight: minHeight }"></div>
 </template>
 
 <script>
@@ -21,6 +21,10 @@
                 type: String,
                 default: '800px',
             },
+            id: {
+                type: String,
+                default: 'editor',
+            },
         },
         created() {
             const unlayerScript = document.createElement('script');
@@ -30,8 +34,6 @@
                 this.loadEditor();
             };
             document.head.appendChild(unlayerScript);
-        },
-        mounted() {
         },
         methods: {
             loadEditor() {
@@ -59,26 +61,25 @@
 
                 const config = {
                     ...options,
-                    id: 'editor',
+                    id: this.id,
                     displayMode: this.displayMode,
                 };
 
-                /* global unlayer */
-                unlayer.init(config);
+                window.unlayer.init(config);
 
                 this.$emit('load');
             },
             loadDesign(design) {
-                unlayer.loadDesign(design);
+                window.unlayer.loadDesign(design);
             },
             loadTemplate(templateId) {
-                unlayer.loadTemplate(templateId);
+                window.unlayer.loadTemplate(templateId);
             },
             saveDesign(callback) {
-                unlayer.saveDesign(callback);
+                window.unlayer.saveDesign(callback);
             },
             exportHtml(callback) {
-                unlayer.exportHtml(callback);
+                window.unlayer.exportHtml(callback);
             },
         },
     }

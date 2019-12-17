@@ -18,7 +18,7 @@
             <unlayer-editor
                 class="form-input-bordered"
                 ref="editor"
-                v-on:load="editorLoaded"
+                @load="editorLoaded"
                 :minHeight=editorHeight
                 :locale=field.config.locale
                 :projectId=field.config.projectId
@@ -89,9 +89,9 @@
                 }
 
                 /** @see https://docs.unlayer.com/docs/events */
-                window.unlayer.addEventListener('design:loaded', this.handleDesignLoaded);
-                window.unlayer.addEventListener('design:updated', this.handleDesignUpdated);
-                window.unlayer.addEventListener('onImageUpload', this.handleImageUploaded);
+                this.$refs.editor.addEventListener('design:loaded', this.handleDesignLoaded);
+                this.$refs.editor.addEventListener('design:updated', this.handleDesignUpdated);
+                this.$refs.editor.addEventListener('onImageUpload', this.handleImageUploaded);
             },
 
             /**
@@ -113,7 +113,7 @@
                     payload: loadedDesign,
                 });
 
-                window.unlayer.exportHtml((editorData) => {
+                this.$refs.editor.exportHtml((editorData) => {
                     this.design = editorData.design;
                     this.html = editorData.html;
                 });
@@ -128,7 +128,7 @@
                     payload: changeLog,
                 });
 
-                window.unlayer.exportHtml((editorData) => {
+                this.$refs.editor.exportHtml((editorData) => {
                     const originalDesignAsString = JSON.stringify(editorData.design);
                     /** @type {string} */
                     const updatedDesignAsString = this.loadedPlugins.reduce((prev, plugin) => {
