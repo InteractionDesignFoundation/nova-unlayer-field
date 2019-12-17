@@ -55,7 +55,7 @@ class Unlayer extends Code
 
     /**
      * Set generated HTML code that can be used on details page.
-     * @param $html
+     * @param string|callable $html
      * @return \IDF\NovaUnlayerField\Unlayer
      */
     public function html($html): Unlayer
@@ -69,7 +69,7 @@ class Unlayer extends Code
 
     /**
      * Specify javascript modules to process unlayer's design on every design change.
-     * @param array $plugins
+     * @param string[] $plugins
      * @return \IDF\NovaUnlayerField\Unlayer
      */
     public function plugins(array $plugins): Unlayer
