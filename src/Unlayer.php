@@ -32,6 +32,7 @@ class Unlayer extends Code
         return $this->withMeta([
             'config' => $unlayerConfig,
             'html' => '',
+            'plugins' => [],
         ]);
     }
 
@@ -64,6 +65,16 @@ class Unlayer extends Code
             : $html;
 
         return $this->withMeta(['html' => $html]);
+    }
+
+    /**
+     * Specify javascript modules to process unlayer's design on every design change.
+     * @param array $plugins
+     * @return \IDF\NovaUnlayerField\Unlayer
+     */
+    public function plugins(array $plugins): Unlayer
+    {
+        return $this->withMeta(['plugins' => $plugins]);
     }
 
     /**

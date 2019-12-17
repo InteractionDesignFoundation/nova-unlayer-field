@@ -1,28 +1,46 @@
 <template>
-    <default-field :field="field" :errors="errors" :full-width-content="true">
+    <default-field
+        :field="field"
+        :errors="errors"
+        :full-width-content="true"
+    >
         <template slot="field">
             <div class="unlayerControls flex">
                 <button
                         id="fullscreenToggleButton"
-                        class="text-xs bg-90 hover:bg-black text-white font-semibold rounded-sm px-4 py-1 m-1 form-input-bordered"
+                        class="text-xs bg-90 hover:bg-black text-white font-semibold rounded-sm px-4 py-1 m-1 border"
                         @click="toggleFullscreen"
                         type="button">
                     {{ fullscreenButtonText.on }}
                 </button>
             </div>
-            <div :id=containerId :style="{height: field.height || '800px'}" class="form-input-bordered"></div>
-            <p v-if="hasError" class="my-2 text-danger">
-                {{ firstError }}
-            </p>
+
+            <unlayer-editor
+                class="form-input-bordered"
+                ref="editor"
+                v-on:load="editorLoaded"
+                :minHeight=editorHeight
+                :locale=field.config.locale
+                :projectId=field.config.projectId
+                :templateId="field.value ? null : field.config.templateId"
+                :style="{height: editorHeight}"
+            />
         </template>
     </default-field>
 </template>
 
 <script>
+    import EmailEditor from './UnlayerEditor'
     import { FormField, HandlesValidationErrors } from 'laravel-nova'
+
+    const defaultHeight = '800px';
 
     export default {
         mixins: [FormField, HandlesValidationErrors],
+
+        components: {
+            EmailEditor
+        },
 
         props: ['resourceName', 'resourceId', 'field'],
 
@@ -31,16 +49,17 @@
                 on: '▶ Enter fullscreen',
                 off: '✖︎ Exit fullscreen',
             },
+            loadedPlugins: [],
         }),
 
-        created() {
-            this.injectUnlayerScript(this.initEditor);
+        computed: {
+            editorHeight() {
+                return this.field.height || defaultHeight;
+            },
         },
 
-        computed: {
-            containerId: function () {
-                return `${this.field.attribute}--editorContainer`;
-            }
+        mounted() {
+            this.loadPlugins(this.field.plugins);
         },
 
         methods: {
@@ -62,112 +81,97 @@
             },
 
             /**
-             * Set the initial, internal value for the field.
+             * Register listeners, load initial template, etc.
              */
-            setInitialValue() {
-                this.value = this.field.value ? JSON.parse(this.field.value) : {};
+            editorLoaded() {
+                if (this.field.value) {
+                    this.$refs.editor.loadDesign(JSON.parse(this.field.value));
+                }
+
+                /** @see https://docs.unlayer.com/docs/events */
+                window.unlayer.addEventListener('design:loaded', this.handleDesignLoaded);
+                window.unlayer.addEventListener('design:updated', this.handleDesignUpdated);
+                window.unlayer.addEventListener('onImageUpload', this.handleImageUploaded);
             },
 
             /**
              * Fill the given FormData object with the field's internal value.
+             * Nova runs it before submission.
              * @property {FormData} formData
              */
             fill(formData) {
-                formData.append(this.field.attribute, JSON.stringify(this.value));
-                formData.append(`${this.field.attribute}_html`, this.finalHtml);
-            },
-
-            /**
-             * Update the field's internal value.
-             */
-            handleChange(value) {
-                this.value = value
-            },
-
-            /**
-             * @param {Function} onLoadCallback
-             */
-            injectUnlayerScript(onLoadCallback) {
-                const unlayerScript = document.createElement('script');
-                unlayerScript.setAttribute('src', '//editor.unlayer.com/embed.js');
-                unlayerScript.onload = onLoadCallback;
-                document.head.appendChild(unlayerScript);
-            },
-
-            /**
-             * Init unlayer editor and add event listeners
-             */
-            initEditor() {
-                const unlayerConfig = this.field.config;
-                unlayerConfig.id = this.containerId;
-                const editExistDesign = this.value && Object.keys(this.value).length;
-                if (editExistDesign && unlayerConfig.templateId) {
-                    this.templateId = unlayerConfig.templateId;
-                    delete unlayerConfig.templateId;
-                }
-
-                window.unlayer.init(unlayerConfig);
-
-                if (editExistDesign) {
-                    window.unlayer.loadDesign(this.value);
-                }
-
-                /** @see https://docs.unlayer.com/docs/events */
-                window.unlayer.addEventListener('design:loaded', this.designLoaded);
-                window.unlayer.addEventListener('design:updated', this.designUpdated);
-                window.unlayer.addEventListener('onImageUpload', this.imageUpload);
+                formData.append(this.field.attribute, JSON.stringify(this.design));
+                formData.append(`${this.field.attribute}_html`, this.html);
             },
 
             /**
              * @param {{design: Object}} loadedDesign
              */
-            designLoaded(loadedDesign) {
+            handleDesignLoaded(loadedDesign) {
                 Nova.$emit('unlayer:design:loaded', {
                     inputName: this.field.attribute,
                     payload: loadedDesign,
                 });
 
                 window.unlayer.exportHtml((editorData) => {
-                    this.finalHtml = editorData.html;
-                    this.value = editorData.design;
+                    this.design = editorData.design;
+                    this.html = editorData.html;
                 });
             },
 
             /**
              * @param {{item: Object, type: string}} changeLog
              */
-            designUpdated(changeLog) {
+            handleDesignUpdated(changeLog) {
                 Nova.$emit('unlayer:design:updated', {
                     inputName: this.field.attribute,
                     payload: changeLog,
                 });
 
-                this.exportHtml();
-            },
-
-            /**
-             * Build HTML based on current JSON config
-             */
-            exportHtml() {
                 window.unlayer.exportHtml((editorData) => {
-                    this.finalHtml = editorData.html;
-                    this.value = editorData.design;
+                    const originalDesignAsString = JSON.stringify(editorData.design);
+                    /** @type {string} */
+                    const updatedDesignAsString = this.loadedPlugins.reduce((prev, plugin) => {
+                        return plugin.process(prev, changeLog.type);
+                    }, originalDesignAsString);
 
-                    Nova.$emit('unlayer:html:exported', {
-                        inputName: this.field.attribute,
-                        payload: editorData,
-                    });
+                    if (updatedDesignAsString !== originalDesignAsString) {
+                        const updatedDesign = JSON.parse(updatedDesignAsString);
+                        this.$refs.editor.loadDesign(updatedDesign);
+
+                        this.design = editorData.design;
+                        this.html = editorData.html;
+                    }
                 });
             },
 
             /**
              * @param {Object} imageData
              */
-            imageUpload(imageData) {
+            handleImageUploaded(imageData) {
                 Nova.$emit('unlayer:image:uploaded', {
                     inputName: this.field.attribute,
                     payload: imageData,
                 });
+            },
+
+            /**
+             * @param {Array} plugins
+             */
+            loadPlugins(plugins) {
+                const importPromises = [];
+                plugins.forEach(pluginUrl => {
+                    // Use native browser's import because we don't know anything about path to the module
+                    // at the moment of JS transpiling by webpack and babel.
+                    importPromises.push(import(/* webpackIgnore: true */ pluginUrl));
+                });
+
+                Promise.all(importPromises).then(loadedPlugins => {
+                    this.loadedPlugins = loadedPlugins;
+                }).catch(this.$toasted.show(
+                    'Could not load one or more Unlayer plugins. Unlayer editor loaded without any plugins.',
+                    { type: 'error' })
+                );
             },
         },
     }
