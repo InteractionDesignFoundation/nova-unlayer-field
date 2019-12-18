@@ -49,17 +49,12 @@
                 on: '▶ Enter fullscreen',
                 off: '✖︎ Exit fullscreen',
             },
-            loadedPlugins: [],
         }),
 
         computed: {
             editorHeight() {
                 return this.field.height || defaultHeight;
             },
-        },
-
-        mounted() {
-            this.loadPlugins(this.field.plugins);
         },
 
         methods: {
@@ -89,9 +84,26 @@
                 }
 
                 /** @see https://docs.unlayer.com/docs/events */
-                this.$refs.editor.addEventListener('design:loaded', this.handleDesignLoaded);
-                this.$refs.editor.addEventListener('design:updated', this.handleDesignUpdated);
-                this.$refs.editor.addEventListener('onImageUpload', this.handleImageUploaded);
+                window.unlayer.addEventListener('design:loaded', this.handleDesignLoaded);
+                window.unlayer.addEventListener('design:updated', this.handleDesignUpdated);
+                window.unlayer.addEventListener('onImageUpload', this.handleImageUploaded);
+
+                this.loadPlugins(this.field.plugins);
+            },
+
+            /**
+             * @param {Array} pluginsUrls
+             */
+            loadPlugins(pluginsUrls) {
+                if (window.unlayer.plugins === undefined) {
+                    window.unlayer.plugins = [];
+                }
+
+                pluginsUrls.forEach(pluginUrl => {
+                    const script = document.createElement('script');
+                    script.setAttribute('src', pluginUrl);
+                    document.head.appendChild(script);
+                });
             },
 
             /**
@@ -131,8 +143,8 @@
                 this.$refs.editor.exportHtml((editorData) => {
                     const originalDesignAsString = JSON.stringify(editorData.design);
                     /** @type {string} */
-                    const updatedDesignAsString = this.loadedPlugins.reduce((prev, plugin) => {
-                        return plugin.process(prev, changeLog.type);
+                    const updatedDesignAsString = Object.values(window.unlayer.plugins).reduce((prev, pluginFn) => {
+                        return pluginFn(prev, changeLog.type);
                     }, originalDesignAsString);
 
                     if (updatedDesignAsString !== originalDesignAsString) {
@@ -153,25 +165,6 @@
                     inputName: this.field.attribute,
                     payload: imageData,
                 });
-            },
-
-            /**
-             * @param {Array} plugins
-             */
-            loadPlugins(plugins) {
-                const importPromises = [];
-                plugins.forEach(pluginUrl => {
-                    // Use native browser's import because we don't know anything about path to the module
-                    // at the moment of JS transpiling by webpack and babel.
-                    importPromises.push(import(/* webpackIgnore: true */ pluginUrl));
-                });
-
-                Promise.all(importPromises).then(loadedPlugins => {
-                    this.loadedPlugins = loadedPlugins;
-                }).catch(this.$toasted.show(
-                    'Could not load one or more Unlayer plugins. Unlayer editor loaded without any plugins.',
-                    { type: 'error' })
-                );
             },
         },
     }
