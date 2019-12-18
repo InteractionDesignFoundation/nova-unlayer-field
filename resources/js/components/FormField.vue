@@ -120,40 +120,70 @@
              * @param {{design: Object}} loadedDesign
              */
             handleDesignLoaded(loadedDesign) {
-                Nova.$emit('unlayer:design:loaded', {
-                    inputName: this.field.attribute,
-                    payload: loadedDesign,
-                });
-
                 this.$refs.editor.exportHtml((editorData) => {
                     this.design = editorData.design;
                     this.html = editorData.html;
                 });
+
+                Nova.$emit('unlayer:design:loaded', {
+                    inputName: this.field.attribute,
+                    payload: loadedDesign,
+                });
             },
 
             /**
-             * @param {{item: Object, type: string}} changeLog
+             * Generate a design where we use replace a changed node
+             * (usually updated by plugins) by it's new state
+             * @param {Object} updatedNode
+             * @param {Object} design
+             * @returns {Object}
+             */
+            getDesignWithUpdatedNode(updatedNode, design) {
+                const htmlIdOfChangedNode = updatedNode.values._meta.htmlID;
+
+                design.body.rows.forEach((row, rowIndex) => {
+                    return row.columns.forEach((column, columnIndex) => {
+                        return column.contents.find((currentNode, contentIndex) => {
+                            if (currentNode.values._meta.htmlID !== htmlIdOfChangedNode) {
+                                return false;
+                            }
+
+                            design.body.rows[rowIndex].columns[columnIndex].contents[contentIndex] = updatedNode;
+                            return true;
+                        });
+                    });
+                });
+
+                return design;
+            },
+
+            /**
+             * @param {{item: Object, type: string, changes: ?Object}} changeLog
              */
             handleDesignUpdated(changeLog) {
+                const originalChangedItemAsString = JSON.stringify(changeLog.item);
+
+                /** @type {Object} */
+                const updatedByPluginsNode = Object.values(window.unlayer.plugins).reduce((prev, pluginFn) => {
+                    return pluginFn(prev, changeLog.type, changeLog.changes);
+                }, changeLog.item);
+
+                const updatedChangeLogAsString = JSON.stringify(updatedByPluginsNode);
+                if (originalChangedItemAsString !== updatedChangeLogAsString) {
+                    this.$refs.editor.exportHtml((editorData) => {
+                        const design = this.getDesignWithUpdatedNode(updatedByPluginsNode, editorData.design);
+                        this.$refs.editor.loadDesign(design);
+
+                        this.$refs.editor.exportHtml((editorData) => {
+                            this.design = editorData.design;
+                            this.html = editorData.html;
+                        });
+                    });
+                }
+
                 Nova.$emit('unlayer:design:updated', {
                     inputName: this.field.attribute,
                     payload: changeLog,
-                });
-
-                this.$refs.editor.exportHtml((editorData) => {
-                    const originalDesignAsString = JSON.stringify(editorData.design);
-                    /** @type {string} */
-                    const updatedDesignAsString = Object.values(window.unlayer.plugins).reduce((prev, pluginFn) => {
-                        return pluginFn(prev, changeLog.type);
-                    }, originalDesignAsString);
-
-                    if (updatedDesignAsString !== originalDesignAsString) {
-                        const updatedDesign = JSON.parse(updatedDesignAsString);
-                        this.$refs.editor.loadDesign(updatedDesign);
-
-                        this.design = editorData.design;
-                        this.html = editorData.html;
-                    }
                 });
             },
 
