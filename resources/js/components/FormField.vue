@@ -58,23 +58,6 @@
         },
 
         methods: {
-            toggleFullscreen() {
-                // toggle scrolling of the page
-                document.body.classList.toggle('overflow-hidden');
-
-                const unlayerEditorContainer = this.$el.querySelector(`#${this.containerId}`);
-                unlayerEditorContainer.classList.toggle('z-50');
-                unlayerEditorContainer.classList.toggle('fullscreen');
-
-                const controls = this.$el.querySelector('.unlayerControls');
-                controls.classList.toggle('stickyControls');
-
-                const toggleButton = controls.querySelector(`#fullscreenToggleButton`);
-                unlayerEditorContainer.classList.contains('fullscreen')
-                    ? toggleButton.innerText = this.fullscreenButtonText.off
-                    : toggleButton.innerText = this.fullscreenButtonText.on;
-            },
-
             /**
              * Register listeners, load initial template, etc.
              */
@@ -141,8 +124,8 @@
             getDesignWithUpdatedNode(updatedNode, design) {
                 const htmlIdOfChangedNode = updatedNode.values._meta.htmlID;
 
-                design.body.rows.forEach((row, rowIndex) => {
-                    return row.columns.forEach((column, columnIndex) => {
+                design.body.rows.find((row, rowIndex) => {
+                    return row.columns.find((column, columnIndex) => {
                         return column.contents.find((currentNode, contentIndex) => {
                             if (currentNode.values._meta.htmlID !== htmlIdOfChangedNode) {
                                 return false;
@@ -150,8 +133,8 @@
 
                             design.body.rows[rowIndex].columns[columnIndex].contents[contentIndex] = updatedNode;
                             return true;
-                        });
-                    });
+                        }) === true;
+                    }) === true;
                 });
 
                 return design;
@@ -196,6 +179,24 @@
                     payload: imageData,
                 });
             },
+
+            toggleFullscreen() {
+                // toggle scrolling of the page
+                document.body.classList.toggle('overflow-hidden');
+
+                const unlayerEditorContainer = this.$el.querySelector(`#${this.containerId}`);
+                unlayerEditorContainer.classList.toggle('z-50');
+                unlayerEditorContainer.classList.toggle('fullscreen');
+
+                const controls = this.$el.querySelector('.unlayerControls');
+                controls.classList.toggle('stickyControls');
+
+                const toggleButton = controls.querySelector(`#fullscreenToggleButton`);
+                unlayerEditorContainer.classList.contains('fullscreen')
+                    ? toggleButton.innerText = this.fullscreenButtonText.off
+                    : toggleButton.innerText = this.fullscreenButtonText.on;
+            },
+
         },
     }
 </script>
