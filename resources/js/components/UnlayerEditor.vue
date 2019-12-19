@@ -1,5 +1,5 @@
 <template>
-    <div :id=id class="flex" :style="{ minHeight: minHeight }"></div>
+    <div :id=id class="flex h-full" :style="{ minHeight: minHeight }"></div>
 </template>
 
 <script>
@@ -19,7 +19,7 @@
             },
             minHeight: {
                 type: String,
-                default: '800px',
+                default: '500px',
             },
             id: {
                 type: String,

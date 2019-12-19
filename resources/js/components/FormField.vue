@@ -5,26 +5,29 @@
         :full-width-content="true"
     >
         <template slot="field">
-            <div class="unlayerControls flex">
-                <button
-                        id="fullscreenToggleButton"
-                        class="text-xs bg-90 hover:bg-black text-white font-semibold rounded-sm px-4 py-1 m-1 border"
-                        @click="toggleFullscreen"
-                        type="button">
-                    {{ fullscreenButtonText.on }}
-                </button>
-            </div>
+            <div class="fullscreenable">
+                <div class="unlayerControls flex">
+                    <button
+                            id="fullscreenToggleButton"
+                            class="text-xs bg-90 hover:bg-black text-white font-semibold rounded-sm px-4 py-1 m-1 border"
+                            @click="toggleFullscreen"
+                            type="button">
+                        {{ fullscreenButtonText.on }}
+                    </button>
+                </div>
 
-            <unlayer-editor
-                class="form-input-bordered"
-                ref="editor"
-                @load="editorLoaded"
-                :minHeight=editorHeight
-                :locale=field.config.locale
-                :projectId=field.config.projectId
-                :templateId="field.value ? null : field.config.templateId"
-                :style="{height: editorHeight}"
-            />
+                <unlayer-editor
+                    class="form-input-bordered"
+                    ref="editor"
+                    @load="editorLoaded"
+                    :minHeight=editorHeight
+                    :locale=field.config.locale
+                    :projectId=field.config.projectId
+                    :templateId="field.value ? null : field.config.templateId"
+                    :style="{height: editorHeight}"
+                    :options=field.config
+                />
+            </div>
         </template>
     </default-field>
 </template>
@@ -33,7 +36,7 @@
     import EmailEditor from './UnlayerEditor'
     import { FormField, HandlesValidationErrors } from 'laravel-nova'
 
-    const defaultHeight = '800px';
+    const defaultHeight = '500px';
 
     export default {
         mixins: [FormField, HandlesValidationErrors],
@@ -184,8 +187,8 @@
                 // toggle scrolling of the page
                 document.body.classList.toggle('overflow-hidden');
 
-                const unlayerEditorContainer = this.$el.querySelector(`#${this.containerId}`);
-                unlayerEditorContainer.classList.toggle('z-50');
+                const unlayerEditorContainer = this.$el.querySelector(`.fullscreenable`);
+                unlayerEditorContainer.classList.toggle('z-50'); // increase z-index
                 unlayerEditorContainer.classList.toggle('fullscreen');
 
                 const controls = this.$el.querySelector('.unlayerControls');
