@@ -157,6 +157,16 @@
                 const updatedChangeLogAsString = JSON.stringify(updatedByPluginsNode);
                 if (originalChangedItemAsString !== updatedChangeLogAsString) {
                     this.$refs.editor.exportHtml((editorData) => {
+                        this.design = editorData.design;
+                        this.html = editorData.html;
+                    });
+                } else {
+                    /**
+                     * 1. Get current design [using exportHtml()]
+                     * 2. Load updated (by plugins) design [using loadDesign()]
+                     * 3. Store export HTML [need to use another exportHtml() to get final HTML]
+                     */
+                    this.$refs.editor.exportHtml((editorData) => {
                         const design = this.getDesignWithUpdatedNode(updatedByPluginsNode, editorData.design);
                         this.$refs.editor.loadDesign(design);
 
