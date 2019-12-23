@@ -155,7 +155,7 @@
                 }, changeLog.item);
 
                 const updatedChangeLogAsString = JSON.stringify(updatedByPluginsNode);
-                if (originalChangedItemAsString !== updatedChangeLogAsString) {
+                if (originalChangedItemAsString === updatedChangeLogAsString) {
                     this.$refs.editor.exportHtml((editorData) => {
                         this.design = editorData.design;
                         this.html = editorData.html;
