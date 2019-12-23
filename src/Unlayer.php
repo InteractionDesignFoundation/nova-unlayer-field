@@ -92,7 +92,8 @@ class Unlayer extends Code
         }
 
         if ($request->exists($requestAttribute)) {
-            $model->setAttribute($attribute, $request->get($requestAttribute));
+            $attributeValue = json_decode($request->get($requestAttribute), true);
+            $model->setAttribute($attribute, $attributeValue);
         }
     }
 }
