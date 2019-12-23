@@ -19,15 +19,22 @@ composer require idf/nova-unlayer-field
 
 ## Usage
 
+This package assumes that your Model has an attribute to store design config
+(it's better to use `json` or `longtext` SQL type to store it).
+
+On submit, the package sends two fields:
+ - design (stringified json object)
+ - html code. If you want to store HTML to your model, please use `savingCallback()`
+
 ```php
 public function fields()
 {
     return [ 
-        Unlayer::make('Payload Content')->config([
+        Unlayer::make('Content', 'design')->config([
             'projectId' => config('unlayer.project_id'),
-            'templateId' => config('unlayer.newsletter_template_id'),
-            'displayMode' => 'email',
-            'locale' => app()->getLocale(),
+            'templateId' => config('unlayer.newsletter_template_id'), // Optional, used only if bound attribute is empty (e.g. $newsletter->design)
+            'displayMode' => 'email', // Optional, "email" by default
+            'locale' => app()->getLocale(), // Optional
         ]),
      ];
 }
