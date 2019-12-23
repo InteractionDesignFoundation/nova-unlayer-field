@@ -65,8 +65,8 @@
              * Register listeners, load initial template, etc.
              */
             editorLoaded() {
-                if (this.field.value) {
-                    this.$refs.editor.loadDesign(JSON.parse(this.field.value));
+                if (this.field.value !== null) {
+                    this.$refs.editor.loadDesign(this.field.value);
                 }
 
                 /** @see https://docs.unlayer.com/docs/events */
