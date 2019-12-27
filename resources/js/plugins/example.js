@@ -1,7 +1,7 @@
 /**
  * Example of simple plugin to change default font-size of a just added text content.
  */
-(function(unlayer) {
+(function(unlayer, Nova) {
     unlayer.plugins['change-fontsize'] = processNode;
 
     const supportedEventTypes = ['content:added'];
@@ -26,6 +26,7 @@
         }
 
         if (node.type === 'text') {
+            Nova.app.$toasted.show('It worked!', { type: 'success' });
             return processAddedTextNode(node);
         }
 
@@ -40,4 +41,4 @@
         node.values.text = node.values.text.replace('font-size: 14px', `font-size: ${defaultFontSizeInPx}px`);
         return node;
     }
-})(window.unlayer);
+})(window.unlayer, window.Nova);
