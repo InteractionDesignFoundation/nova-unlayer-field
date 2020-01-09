@@ -1,11 +1,11 @@
 <?php declare(strict_types=1);
 
-namespace Idf\NovaUnlayerField;
+namespace IDF\NovaUnlayerField;
 
 use Illuminate\Support\ServiceProvider as BasicServiceProvider;
 use Laravel\Nova\Nova;
 
-final class ServiceProvider extends BasicServiceProvider
+class ServiceProvider extends BasicServiceProvider
 {
     /** @inheritDoc */
     public function boot(): void
@@ -13,6 +13,10 @@ final class ServiceProvider extends BasicServiceProvider
         Nova::serving(function () {
             Nova::script('nova-unlayer-field', __DIR__.'/../dist/js/field.js');
         });
+
+        $this->publishes([
+            __DIR__.'/../resources/lang/' => resource_path('lang/vendor/nova-unlayer-field'),
+        ]);
 
         $this->registerTranslations();
     }
@@ -23,7 +27,5 @@ final class ServiceProvider extends BasicServiceProvider
 
         Nova::translations(__DIR__."/../resources/lang/$currentLocale.json");
         Nova::translations(resource_path("lang/vendor/nova-unlayer-field/$currentLocale.json"));
-        $this->loadJSONTranslationsFrom(__DIR__.'/../resources/lang');
-        $this->loadJSONTranslationsFrom(resource_path('lang/vendor/nova-unlayer-field'));
     }
 }

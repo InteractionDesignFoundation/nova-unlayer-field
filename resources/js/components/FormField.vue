@@ -12,7 +12,7 @@
                             class="text-xs bg-90 hover:bg-black text-white font-semibold rounded-sm px-4 py-1 m-1 border"
                             @click="toggleFullscreen"
                             type="button">
-                        {{ fullscreenButtonText.on }}
+                        {{ __('Enter fullscreen') }}
                     </button>
                 </div>
 
@@ -46,13 +46,6 @@
         },
 
         props: ['resourceName', 'resourceId', 'field'],
-
-        data: () => ({
-            fullscreenButtonText: {
-                on: __('Enter fullscreen'),
-                off: __('Exit fullscreen'),
-            },
-        }),
 
         computed: {
             editorHeight() {
@@ -204,10 +197,12 @@
                 const controls = this.$el.querySelector('.unlayerControls');
                 controls.classList.toggle('stickyControls');
 
+                const trans = Nova.app.$options.methods.__;
+
                 const toggleButton = controls.querySelector(`#fullscreenToggleButton`);
                 unlayerEditorContainer.classList.contains('fullscreen')
-                    ? toggleButton.innerText = this.fullscreenButtonText.off
-                    : toggleButton.innerText = this.fullscreenButtonText.on;
+                    ? toggleButton.innerText = trans('Exit fullscreen')
+                    : toggleButton.innerText = trans('Enter fullscreen');
             },
 
         },
