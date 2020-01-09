@@ -1,11 +1,11 @@
 <?php declare(strict_types=1);
 
-namespace Idf\NovaUnlayerField;
+namespace IDF\NovaUnlayerField;
 
 use Illuminate\Support\ServiceProvider as BasicServiceProvider;
 use Laravel\Nova\Nova;
 
-final class ServiceProvider extends BasicServiceProvider
+class ServiceProvider extends BasicServiceProvider
 {
     /** @inheritDoc */
     public function boot(): void
