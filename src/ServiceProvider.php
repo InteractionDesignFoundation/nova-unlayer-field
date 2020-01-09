@@ -14,6 +14,10 @@ class ServiceProvider extends BasicServiceProvider
             Nova::script('nova-unlayer-field', __DIR__.'/../dist/js/field.js');
         });
 
+        $this->publishes([
+            __DIR__.'/../resources/lang/' => resource_path('lang/vendor/nova-unlayer-field'),
+        ]);
+
         $this->registerTranslations();
     }
 
@@ -22,5 +26,6 @@ class ServiceProvider extends BasicServiceProvider
         $currentLocale = app()->getLocale();
 
         Nova::translations(__DIR__."/../resources/lang/$currentLocale.json");
+        Nova::translations(resource_path("lang/vendor/nova-unlayer-field/$currentLocale.json"));
     }
 }
