@@ -7,7 +7,7 @@
                         class="text-xs bg-90 hover:bg-black text-white font-semibold rounded-sm px-4 py-1 m-1 form-input-bordered"
                         @click="toggleFullscreen"
                         type="button">
-                    {{ fullscreenButtonText.on }}
+                    {{ __('Enter fullscreen') }}
                 </button>
             </div>
             <div :id=containerId :style="{height: field.height || '800px'}" class="form-input-bordered"></div>
@@ -25,13 +25,6 @@
         mixins: [FormField, HandlesValidationErrors],
 
         props: ['resourceName', 'resourceId', 'field'],
-
-        data: () => ({
-            fullscreenButtonText: {
-                on: '▶ Enter fullscreen',
-                off: '✖︎ Exit fullscreen',
-            },
-        }),
 
         created() {
             this.injectUnlayerScript(this.initEditor);
@@ -56,9 +49,10 @@
                 controls.classList.toggle('stickyControls');
 
                 const toggleButton = controls.querySelector(`#fullscreenToggleButton`);
+                const trans = Nova.app.$options.methods.__;
                 unlayerEditorContainer.classList.contains('fullscreen')
-                    ? toggleButton.innerText = this.fullscreenButtonText.off
-                    : toggleButton.innerText = this.fullscreenButtonText.on;
+                    ? toggleButton.innerText = trans('Exit fullscreen')
+                    : toggleButton.innerText = trans('Enter fullscreen');
             },
 
             /**

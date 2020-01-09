@@ -13,5 +13,14 @@ class ServiceProvider extends BasicServiceProvider
         Nova::serving(function () {
             Nova::script('nova-unlayer-field', __DIR__.'/../dist/js/field.js');
         });
+
+        $this->registerTranslations();
+    }
+
+    protected function registerTranslations(): void
+    {
+        $currentLocale = app()->getLocale();
+
+        Nova::translations(__DIR__."/../resources/lang/$currentLocale.json");
     }
 }
