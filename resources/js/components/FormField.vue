@@ -49,8 +49,8 @@
 
         data: () => ({
             fullscreenButtonText: {
-                on: '▶ Enter fullscreen',
-                off: '✖︎ Exit fullscreen',
+                on: __('Enter fullscreen'),
+                off: __('Exit fullscreen'),
             },
         }),
 
