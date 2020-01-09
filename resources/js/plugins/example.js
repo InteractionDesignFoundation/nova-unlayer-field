@@ -25,8 +25,8 @@
             return node;
         }
 
-        if (node.type === 'text') {
-            Nova.app.$toasted.show('It worked!', { type: 'success' });
+        if (node.type === 'text' || node.type === 'button') {
+            Nova.app.$toasted.show('It works!', { type: 'success' });
             return processAddedTextNode(node);
         }
 
