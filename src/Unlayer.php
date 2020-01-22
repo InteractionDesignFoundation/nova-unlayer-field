@@ -32,6 +32,7 @@ class Unlayer extends Code
         return $this->withMeta([
             'config' => $unlayerConfig,
             'html' => '',
+            'plugins' => [],
         ]);
     }
 
@@ -54,7 +55,7 @@ class Unlayer extends Code
 
     /**
      * Set generated HTML code that can be used on details page.
-     * @param $html
+     * @param string|callable $html
      * @return \IDF\NovaUnlayerField\Unlayer
      */
     public function html($html): Unlayer
@@ -64,6 +65,16 @@ class Unlayer extends Code
             : $html;
 
         return $this->withMeta(['html' => $html]);
+    }
+
+    /**
+     * Specify javascript modules to process unlayer's design on every design change.
+     * @param string[] $plugins
+     * @return \IDF\NovaUnlayerField\Unlayer
+     */
+    public function plugins(array $plugins): Unlayer
+    {
+        return $this->withMeta(['plugins' => $plugins]);
     }
 
     /**
@@ -81,7 +92,8 @@ class Unlayer extends Code
         }
 
         if ($request->exists($requestAttribute)) {
-            $model->setAttribute($attribute, $request->get($requestAttribute));
+            $attributeValue = json_decode($request->get($requestAttribute), true);
+            $model->setAttribute($attribute, $attributeValue);
         }
     }
 }

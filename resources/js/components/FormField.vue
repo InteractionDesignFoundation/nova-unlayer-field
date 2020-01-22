@@ -1,168 +1,209 @@
 <template>
-    <default-field :field="field" :errors="errors" :full-width-content="true">
+    <default-field
+        :field="field"
+        :errors="errors"
+        :full-width-content="true"
+    >
         <template slot="field">
-            <div class="unlayerControls flex">
-                <button
-                        id="fullscreenToggleButton"
-                        class="text-xs bg-90 hover:bg-black text-white font-semibold rounded-sm px-4 py-1 m-1 form-input-bordered"
-                        @click="toggleFullscreen"
-                        type="button">
-                    {{ __('Enter fullscreen') }}
-                </button>
+            <div class="fullscreenable">
+                <div class="unlayerControls flex">
+                    <button
+                            id="fullscreenToggleButton"
+                            class="text-xs bg-90 hover:bg-black text-white font-semibold rounded-sm px-4 py-1 m-1 border"
+                            @click="toggleFullscreen"
+                            type="button">
+                        {{ __('Enter fullscreen') }}
+                    </button>
+                </div>
+
+                <unlayer-editor
+                    class="form-input-bordered"
+                    :style="{minHeight: containerHeight}"
+                    ref="editor"
+                    @load="editorLoaded"
+                    :locale=field.config.locale
+                    :projectId=field.config.projectId
+                    :templateId="field.value ? null : field.config.templateId"
+                    :options=field.config
+                />
             </div>
-            <div :id=containerId :style="{height: field.height || '800px'}" class="form-input-bordered"></div>
-            <p v-if="hasError" class="my-2 text-danger">
-                {{ firstError }}
-            </p>
         </template>
     </default-field>
 </template>
 
 <script>
+    import EmailEditor from './UnlayerEditor'
     import { FormField, HandlesValidationErrors } from 'laravel-nova'
+
+    const defaultHeight = '700px';
 
     export default {
         mixins: [FormField, HandlesValidationErrors],
 
-        props: ['resourceName', 'resourceId', 'field'],
-
-        created() {
-            this.injectUnlayerScript(this.initEditor);
+        components: {
+            EmailEditor
         },
 
+        props: ['resourceName', 'resourceId', 'field'],
+
         computed: {
-            containerId: function () {
-                return `${this.field.attribute}--editorContainer`;
-            }
+            containerHeight: function () {
+                return this.field.height || defaultHeight;
+            },
         },
 
         methods: {
-            toggleFullscreen() {
-                // toggle scrolling of the page
-                document.body.classList.toggle('overflow-hidden');
+            /**
+             * Register listeners, load initial template, etc.
+             */
+            editorLoaded() {
+                if (this.field.value !== null) {
+                    this.$refs.editor.loadDesign(this.field.value);
+                }
 
-                const unlayerEditorContainer = this.$el.querySelector(`#${this.containerId}`);
-                unlayerEditorContainer.classList.toggle('z-50');
-                unlayerEditorContainer.classList.toggle('fullscreen');
+                /** @see https://docs.unlayer.com/docs/events */
+                window.unlayer.addEventListener('design:loaded', this.handleDesignLoaded);
+                window.unlayer.addEventListener('design:updated', this.handleDesignUpdated);
+                window.unlayer.addEventListener('onImageUpload', this.handleImageUploaded);
 
-                const controls = this.$el.querySelector('.unlayerControls');
-                controls.classList.toggle('stickyControls');
-
-                const toggleButton = controls.querySelector(`#fullscreenToggleButton`);
-                const trans = Nova.app.$options.methods.__;
-                unlayerEditorContainer.classList.contains('fullscreen')
-                    ? toggleButton.innerText = trans('Exit fullscreen')
-                    : toggleButton.innerText = trans('Enter fullscreen');
+                this.loadPlugins(this.field.plugins);
             },
 
             /**
-             * Set the initial, internal value for the field.
+             * @param {Array} pluginsUrls
              */
-            setInitialValue() {
-                this.value = this.field.value ? JSON.parse(this.field.value) : {};
+            loadPlugins(pluginsUrls) {
+                if (window.unlayer.plugins === undefined) {
+                    window.unlayer.plugins = [];
+                }
+
+                pluginsUrls.forEach(pluginUrl => {
+                    const script = document.createElement('script');
+                    script.setAttribute('src', pluginUrl);
+                    document.head.appendChild(script);
+                });
             },
 
             /**
              * Fill the given FormData object with the field's internal value.
+             * Nova runs it before submission.
              * @property {FormData} formData
              */
             fill(formData) {
-                formData.append(this.field.attribute, JSON.stringify(this.value));
-                formData.append(`${this.field.attribute}_html`, this.finalHtml);
-            },
-
-            /**
-             * Update the field's internal value.
-             */
-            handleChange(value) {
-                this.value = value
-            },
-
-            /**
-             * @param {Function} onLoadCallback
-             */
-            injectUnlayerScript(onLoadCallback) {
-                const unlayerScript = document.createElement('script');
-                unlayerScript.setAttribute('src', '//editor.unlayer.com/embed.js');
-                unlayerScript.onload = onLoadCallback;
-                document.head.appendChild(unlayerScript);
-            },
-
-            /**
-             * Init unlayer editor and add event listeners
-             */
-            initEditor() {
-                const unlayerConfig = this.field.config;
-                unlayerConfig.id = this.containerId;
-                const editExistDesign = this.value && Object.keys(this.value).length;
-                if (editExistDesign && unlayerConfig.templateId) {
-                    this.templateId = unlayerConfig.templateId;
-                    delete unlayerConfig.templateId;
-                }
-
-                window.unlayer.init(unlayerConfig);
-
-                if (editExistDesign) {
-                    window.unlayer.loadDesign(this.value);
-                }
-
-                /** @see https://docs.unlayer.com/docs/events */
-                window.unlayer.addEventListener('design:loaded', this.designLoaded);
-                window.unlayer.addEventListener('design:updated', this.designUpdated);
-                window.unlayer.addEventListener('onImageUpload', this.imageUpload);
+                formData.append(this.field.attribute, JSON.stringify(this.design));
+                formData.append(`${this.field.attribute}_html`, this.html);
             },
 
             /**
              * @param {{design: Object}} loadedDesign
              */
-            designLoaded(loadedDesign) {
+            handleDesignLoaded(loadedDesign) {
+                this.$refs.editor.exportHtml((editorData) => {
+                    this.design = editorData.design;
+                    this.html = editorData.html;
+                });
+
                 Nova.$emit('unlayer:design:loaded', {
                     inputName: this.field.attribute,
                     payload: loadedDesign,
                 });
-
-                window.unlayer.exportHtml((editorData) => {
-                    this.finalHtml = editorData.html;
-                    this.value = editorData.design;
-                });
             },
 
             /**
-             * @param {{item: Object, type: string}} changeLog
+             * Generate a design where we use replace a changed node
+             * (usually updated by plugins) by it's new state
+             * @param {Object} updatedNode
+             * @param {Object} design
+             * @returns {Object}
              */
-            designUpdated(changeLog) {
+            getDesignWithUpdatedNode(updatedNode, design) {
+                const htmlIdOfChangedNode = updatedNode.values._meta.htmlID;
+
+                design.body.rows.find((row, rowIndex) => {
+                    return row.columns.find((column, columnIndex) => {
+                        return column.contents.find((currentNode, contentIndex) => {
+                            if (currentNode.values._meta.htmlID !== htmlIdOfChangedNode) {
+                                return false;
+                            }
+
+                            design.body.rows[rowIndex].columns[columnIndex].contents[contentIndex] = updatedNode;
+                            return true;
+                        }) === true;
+                    }) === true;
+                });
+
+                return design;
+            },
+
+            /**
+             * @param {{item: Object, type: string, changes: ?Object}} changeLog
+             */
+            handleDesignUpdated(changeLog) {
+                const originalChangedItemAsString = JSON.stringify(changeLog.item);
+
+                /** @type {Object} */
+                const updatedByPluginsNode = Object.values(window.unlayer.plugins).reduce((prev, pluginFn) => {
+                    return pluginFn(prev, changeLog.type, changeLog.changes);
+                }, changeLog.item);
+
+                const updatedChangeLogAsString = JSON.stringify(updatedByPluginsNode);
+                if (originalChangedItemAsString === updatedChangeLogAsString) {
+                    this.$refs.editor.exportHtml((editorData) => {
+                        this.design = editorData.design;
+                        this.html = editorData.html;
+                    });
+                } else {
+                    /**
+                     * 1. Get current design [using exportHtml()]
+                     * 2. Load updated (by plugins) design [using loadDesign()]
+                     * 3. Store export HTML [need to use another exportHtml() to get final HTML]
+                     */
+                    this.$refs.editor.exportHtml((editorData) => {
+                        const design = this.getDesignWithUpdatedNode(updatedByPluginsNode, editorData.design);
+                        this.$refs.editor.loadDesign(design);
+
+                        this.$refs.editor.exportHtml((editorData) => {
+                            this.design = editorData.design;
+                            this.html = editorData.html;
+                        });
+                    });
+                }
+
                 Nova.$emit('unlayer:design:updated', {
                     inputName: this.field.attribute,
                     payload: changeLog,
-                });
-
-                this.exportHtml();
-            },
-
-            /**
-             * Build HTML based on current JSON config
-             */
-            exportHtml() {
-                window.unlayer.exportHtml((editorData) => {
-                    this.finalHtml = editorData.html;
-                    this.value = editorData.design;
-
-                    Nova.$emit('unlayer:html:exported', {
-                        inputName: this.field.attribute,
-                        payload: editorData,
-                    });
                 });
             },
 
             /**
              * @param {Object} imageData
              */
-            imageUpload(imageData) {
+            handleImageUploaded(imageData) {
                 Nova.$emit('unlayer:image:uploaded', {
                     inputName: this.field.attribute,
                     payload: imageData,
                 });
             },
+
+            toggleFullscreen() {
+                // toggle scrolling of the page
+                document.body.classList.toggle('overflow-hidden');
+
+                const unlayerEditorContainer = this.$el.querySelector(`.fullscreenable`);
+                unlayerEditorContainer.classList.toggle('z-50'); // increase z-index
+                unlayerEditorContainer.classList.toggle('fullscreen');
+
+                const controls = this.$el.querySelector('.unlayerControls');
+                controls.classList.toggle('stickyControls');
+
+                const trans = Nova.app.$options.methods.__;
+
+                const toggleButton = controls.querySelector(`#fullscreenToggleButton`);
+                unlayerEditorContainer.classList.contains('fullscreen')
+                    ? toggleButton.innerText = trans('Exit fullscreen')
+                    : toggleButton.innerText = trans('Enter fullscreen');
+            },
+
         },
     }
 </script>

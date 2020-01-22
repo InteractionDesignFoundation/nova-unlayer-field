@@ -1,6 +1,7 @@
 /vendor
 /node_modules
 package-lock.json
+yarn.lock
 composer.lock
 phpunit.xml
 .phpunit.result.cache
