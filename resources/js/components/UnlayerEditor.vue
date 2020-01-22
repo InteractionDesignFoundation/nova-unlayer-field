@@ -1,5 +1,5 @@
 <template>
-    <div :id=id class="flex h-full" :style="{ minHeight: minHeight }"></div>
+    <div :id=id class="flex h-full unlayerIframeContainer"></div>
 </template>
 
 <script>
@@ -16,10 +16,6 @@
             displayMode: {
                 type: String,
                 default: 'email',
-            },
-            minHeight: {
-                type: String,
-                default: '500px',
             },
             id: {
                 type: String,
@@ -84,3 +80,19 @@
         },
     }
 </script>
+
+<!--Please don't use "scoped" option: it doesn't work with responsible iframe containers-->
+<style>
+    .unlayerIframeContainer {
+        position: relative;
+    }
+
+    .unlayerIframeContainer > iframe {
+        border: 0;
+        height: 100%;
+        left: 0;
+        position: absolute;
+        top: 0;
+        width: 100%;
+    }
+</style>

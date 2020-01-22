@@ -18,13 +18,12 @@
 
                 <unlayer-editor
                     class="form-input-bordered"
+                    :style="{minHeight: containerHeight}"
                     ref="editor"
                     @load="editorLoaded"
-                    :minHeight=editorHeight
                     :locale=field.config.locale
                     :projectId=field.config.projectId
                     :templateId="field.value ? null : field.config.templateId"
-                    :style="{height: editorHeight}"
                     :options=field.config
                 />
             </div>
@@ -36,7 +35,7 @@
     import EmailEditor from './UnlayerEditor'
     import { FormField, HandlesValidationErrors } from 'laravel-nova'
 
-    const defaultHeight = '500px';
+    const defaultHeight = '700px';
 
     export default {
         mixins: [FormField, HandlesValidationErrors],
@@ -48,7 +47,7 @@
         props: ['resourceName', 'resourceId', 'field'],
 
         computed: {
-            editorHeight() {
+            containerHeight: function () {
                 return this.field.height || defaultHeight;
             },
         },
