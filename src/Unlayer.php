@@ -17,6 +17,9 @@ class Unlayer extends Code
     /** @var callable|null */
     public $savingCallback;
 
+    /** @var string Height of the editor (with units) */
+    public $height = '800px';
+
     /**
      * Specify Unlayer config
      * @see https://docs.unlayer.com/docs/getting-started#section-configuration-options
@@ -41,16 +44,6 @@ class Unlayer extends Code
         $this->savingCallback = $callback;
 
         return $this;
-    }
-
-    /**
-     * Set height of the editor (with units)
-     * @param string $height E.g. "800px"
-     * @return \IDF\NovaUnlayerField\Unlayer
-     */
-    public function height(string $height): Unlayer
-    {
-        return $this->withMeta(['height' => $height]);
     }
 
     /**
