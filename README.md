@@ -34,9 +34,9 @@ public function fields()
             'projectId' => config('unlayer.project_id'),
 
             // optional
-            'templateId' => config('unlayer.newsletter_template_id'), // Used only if bound attribute is empty (e.g. $newsletter->design)
-            'displayMode' => 'email', // "email"|"web". Default value: "email"
-            'locale' => app()->getLocale(), // Locale for Unlayer UI
+            'templateId' => config('unlayer.newsletter_template_id'), // Used only if bound attribute ('design' in this case) is empty.
+            'displayMode' => 'web', // "email" or "web". Default value: "email"
+            'locale' => 'es', // Locale for Unlayer UI. Default value: application’s locale.
         ]),
      ];
 }
@@ -44,10 +44,18 @@ public function fields()
 
 ### Options
  - `->config(array|callable $config)`: Specify [Unlayer config](https://docs.unlayer.com/docs/getting-started#section-configuration-options).
- - `->savingCallback(?callable $callback)`: Specify callback on saving a Model. Useful to store HTML result HTML code.
  - `->height(string $height)`: Set height of the editor (with units). E.g. '1000px' (800px by default).
+ - `->savingCallback(?callable $callback)`: Specify a callback to call on before Model saving. Useful to store generated HTML code (to a Model or as a file).
 
-
+Example of using `savingCallback`:
+```php
+Unlayer::make('Design')->config([
+        'projectId' => config('unlayer.project_id'),
+    ])
+    ->savingCallback(function (NovaRequest $request, $attribute, Newsletter $newsletterModel, $htmlFieldName) {
+        $newsletterModel->html = $request->input($htmlFieldName);
+    }),
+````
 ### Changelog
 
 Please see [Releases](https://github.com/InteractionDesignFoundation/nova-unlayer-field/releases) for more information on what has changed recently.
