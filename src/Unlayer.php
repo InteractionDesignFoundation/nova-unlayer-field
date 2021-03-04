@@ -14,7 +14,10 @@ class Unlayer extends Code
      */
     public $component = 'nova-unlayer-field';
 
-    /** @var callable|null */
+    /**
+     * A function to call on filling Model attributes from Request
+     * @var null|callable(\Laravel\Nova\Http\Requests\NovaRequest, string, \Illuminate\Database\Eloquent\Model, string):void $callback
+     */
     public $savingCallback;
 
     /** @var string Height of the editor (with units) */
@@ -23,22 +26,26 @@ class Unlayer extends Code
     /**
      * Specify Unlayer config
      * @see https://docs.unlayer.com/docs/getting-started#section-configuration-options
-     * @param array|callable $config
+     * @param array|callable():array $config
      * @return \IDF\NovaUnlayerField\Unlayer
      */
     public function config($config): Unlayer
     {
-        $unlayerConfig = is_callable($config)
+        $customUnlayerConfig = is_callable($config)
             ? $config()
             : $config;
 
         return $this->withMeta([
-            'config' => $unlayerConfig,
+            'config' => array_merge($this->defaultUnlayerConfig(), $customUnlayerConfig),
             'html' => '',
             'plugins' => [],
         ]);
     }
 
+    /**
+     * @param null|callable(\Laravel\Nova\Http\Requests\NovaRequest, string, \Illuminate\Database\Eloquent\Model, string):void $callback
+     * @return $this
+     */
     public function savingCallback(?callable $callback): Unlayer
     {
         $this->savingCallback = $callback;
@@ -48,7 +55,7 @@ class Unlayer extends Code
 
     /**
      * Set generated HTML code that can be used on details page.
-     * @param string|callable $html
+     * @param string|callable():string $html
      * @return \IDF\NovaUnlayerField\Unlayer
      */
     public function html($html): Unlayer
@@ -80,13 +87,21 @@ class Unlayer extends Code
      */
     protected function fillAttributeFromRequest(NovaRequest $request, $requestAttribute, $model, $attribute)
     {
-        if ($this->savingCallback) {
-            call_user_func($this->savingCallback, $request, $request, $model, "{$requestAttribute}_html");
+        if (is_callable($this->savingCallback)) {
+            call_user_func($this->savingCallback, $request, $requestAttribute, $model, "{$requestAttribute}_html");
         }
 
         if ($request->exists($requestAttribute)) {
             $attributeValue = json_decode($request->get($requestAttribute), true);
             $model->setAttribute($attribute, $attributeValue);
         }
+    }
+
+    private function defaultUnlayerConfig(): array
+    {
+        return [
+            'displayMode' => 'email',
+            'locale' => app()->getLocale(),
+        ];
     }
 }
