@@ -32,9 +32,11 @@ public function fields()
     return [ 
         Unlayer::make('Content', 'design')->config([
             'projectId' => config('unlayer.project_id'),
-            'templateId' => config('unlayer.newsletter_template_id'), // Optional, used only if bound attribute is empty (e.g. $newsletter->design)
-            'displayMode' => 'email', // Optional, "email" by default
-            'locale' => app()->getLocale(), // Optional
+
+            // optional
+            'templateId' => config('unlayer.newsletter_template_id'), // Used only if bound attribute is empty (e.g. $newsletter->design)
+            'displayMode' => 'email', // "email"|"web". Default value: "email"
+            'locale' => app()->getLocale(), // Locale for Unlayer UI
         ]),
      ];
 }
