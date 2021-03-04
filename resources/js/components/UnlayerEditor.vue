@@ -8,15 +8,15 @@
 
         props: {
             options: Object,
-            projectId: Number,
+            projectId: {
+                type: Number,
+                required: true,
+            },
             templateId: Number,
             tools: Object,
             appearance: Object,
             locale: String,
-            displayMode: {
-                type: String,
-                default: 'email',
-            },
+            displayMode: String,
             id: {
                 type: String,
                 default: 'editor',
@@ -58,7 +58,6 @@
                 const config = {
                     ...options,
                     id: this.id,
-                    displayMode: this.displayMode,
                 };
 
                 window.unlayer.init(config);
