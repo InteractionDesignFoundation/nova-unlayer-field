@@ -9,9 +9,15 @@
     "require": {
         "php": "^8.0"
     },
+    "require-dev": {},
     "autoload": {
         "psr-4": {
             "InteractionDesignFoundation\\NovaUnlayerField\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
         }
     },
     "extra": {

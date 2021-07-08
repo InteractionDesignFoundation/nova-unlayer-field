@@ -20,7 +20,7 @@ class Unlayer extends Code
     public $savingCallback;
 
     /** @var string Height of the editor (with units) */
-    public $height = '800px';
+    public string $height = '800px';
 
     /**
      * Specify Unlayer config
