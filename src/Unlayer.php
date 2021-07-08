@@ -1,8 +1,7 @@
 <?php declare(strict_types=1);
 
-namespace IDF\NovaUnlayerField;
+namespace InteractionDesignFoundation\NovaUnlayerField;
 
-use Illuminate\Database\Eloquent\Model;
 use Laravel\Nova\Fields\Code;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
@@ -27,9 +26,8 @@ class Unlayer extends Code
      * Specify Unlayer config
      * @see https://docs.unlayer.com/docs/getting-started#section-configuration-options
      * @param array|callable():array $config
-     * @return \IDF\NovaUnlayerField\Unlayer
      */
-    public function config($config): Unlayer
+    final public function config(array | callable $config): static
     {
         $customUnlayerConfig = is_callable($config)
             ? $config()
@@ -44,9 +42,8 @@ class Unlayer extends Code
 
     /**
      * @param null|callable(\Laravel\Nova\Http\Requests\NovaRequest, string, \Illuminate\Database\Eloquent\Model, string):void $callback
-     * @return $this
      */
-    public function savingCallback(?callable $callback): Unlayer
+    final public function savingCallback(?callable $callback): static
     {
         $this->savingCallback = $callback;
 
@@ -56,9 +53,8 @@ class Unlayer extends Code
     /**
      * Set generated HTML code that can be used on details page.
      * @param string|callable():string $html
-     * @return \IDF\NovaUnlayerField\Unlayer
      */
-    public function html($html): Unlayer
+    final public function html(array | callable $html): static
     {
         $html = is_callable($html)
             ? $html()
@@ -68,20 +64,20 @@ class Unlayer extends Code
     }
 
     /**
-     * Specify javascript modules to process unlayer's design on every design change.
+     * Specify javascript modules to process Unlayer’s design on every design change.
      * @param string[] $plugins
-     * @return \IDF\NovaUnlayerField\Unlayer
      */
-    public function plugins(array $plugins): Unlayer
+    final public function plugins(array $plugins): static
     {
         return $this->withMeta(['plugins' => $plugins]);
     }
 
     /**
      * Hydrate the given attribute on the model based on the incoming request.
+     * @see \Laravel\Nova\Fields\Field::fillAttributeFromRequest
      * @param \Laravel\Nova\Http\Requests\NovaRequest $request
      * @param string $requestAttribute
-     * @param Model $model
+     * @param \Illuminate\Database\Eloquent\Model $model
      * @param string $attribute
      * @return void
      */

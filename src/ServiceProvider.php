@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace IDF\NovaUnlayerField;
+namespace InteractionDesignFoundation\NovaUnlayerField;
 
 use Illuminate\Support\ServiceProvider as BasicServiceProvider;
 use Laravel\Nova\Nova;

@@ -1,5 +1,5 @@
 {
-    "name": "idf/nova-unlayer-field",
+    "name": "interaction-design-foundation/nova-unlayer-field",
     "description": "A Laravel Nova field for Unlayer to compose emails and landing pages",
     "keywords": [
         "laravel",
@@ -7,17 +7,17 @@
     ],
     "license": "MIT",
     "require": {
-        "php": ">=7.1.0"
+        "php": "^8.0"
     },
     "autoload": {
         "psr-4": {
-            "IDF\\NovaUnlayerField\\": "src/"
+            "InteractionDesignFoundation\\NovaUnlayerField\\": "src/"
         }
     },
     "extra": {
         "laravel": {
             "providers": [
-                "IDF\\NovaUnlayerField\\ServiceProvider"
+                "InteractionDesignFoundation\\NovaUnlayerField\\ServiceProvider"
             ]
         }
     },

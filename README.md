@@ -2,8 +2,8 @@
 
 ⚠️ This package is under active development
 
-[![Latest Stable Version](https://poser.pugx.org/idf/nova-unlayer-field/v/stable)](https://packagist.org/packages/idf/nova-unlayer-field)
-[![Total Downloads](https://poser.pugx.org/idf/nova-unlayer-field/downloads)](https://packagist.org/packages/idf/nova-unlayer-field)
+[![Latest Stable Version](https://poser.pugx.org/interaction-design-foundation/nova-unlayer-field/v/stable)](https://packagist.org/packages/idf/nova-unlayer-field)
+[![Total Downloads](https://poser.pugx.org/interaction-design-foundation/nova-unlayer-field/downloads)](https://packagist.org/packages/idf/nova-unlayer-field)
 
 Adds a Laravel Nova field for Unlayer to compose emails and landing pages.
 
@@ -14,7 +14,7 @@ Adds a Laravel Nova field for Unlayer to compose emails and landing pages.
 You can install the package in to a Laravel app that uses [Nova](https://nova.laravel.com) via composer:
 
 ```bash
-composer require idf/nova-unlayer-field
+composer require interaction-design-foundation/nova-unlayer-field
 ```
 
 ## Usage
