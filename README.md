@@ -1,13 +1,13 @@
 # Nova Unlayer Field
 
-⚠️ This package is under active development
-
 [![Latest Stable Version](https://poser.pugx.org/interaction-design-foundation/nova-unlayer-field/v/stable)](https://packagist.org/packages/idf/nova-unlayer-field)
 [![Total Downloads](https://poser.pugx.org/interaction-design-foundation/nova-unlayer-field/downloads)](https://packagist.org/packages/idf/nova-unlayer-field)
 
 Adds a Laravel Nova field for Unlayer to compose emails and landing pages.
 
 ![image](https://github.com/InteractionDesignFoundation/nova-unlayer-field/blob/master/resources/img/demo-800x592@8.gif)
+
+
 
 ## Installation
 
@@ -16,6 +16,7 @@ You can install the package in to a Laravel app that uses [Nova](https://nova.la
 ```bash
 composer require interaction-design-foundation/nova-unlayer-field
 ```
+
 
 ## Usage
 
@@ -42,6 +43,7 @@ public function fields()
 }
 ```
 
+
 ### Options
  - `->config(array|callable $config)`: Specify [Unlayer config](https://docs.unlayer.com/docs/getting-started#section-configuration-options).
  - `->height(string $height)`: Set height of the editor (with units). E.g. '1000px' (800px by default).
@@ -56,13 +58,17 @@ Unlayer::make('Design')->config([
         $newsletterModel->html = $request->input($htmlFieldName);
     }),
 ````
+
+
 ### Changelog
 
 Please see [Releases](https://github.com/InteractionDesignFoundation/nova-unlayer-field/releases) for more information on what has changed recently.
 
+
 ## Contributing
 
 Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
+
 
 ### Compiling Assets
 
@@ -76,6 +82,7 @@ npm run dev
 # Run the NPM "watch" command to auto-compile your assets when they are changed:
 npm run watch
 ```
+
 
 ## License
 
