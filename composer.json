@@ -3,7 +3,8 @@
     "description": "A Laravel Nova field for Unlayer to compose emails and landing pages",
     "keywords": [
         "laravel",
-        "nova"
+        "nova",
+        "laravel-nova-field"
     ],
     "license": "MIT",
     "require": {
