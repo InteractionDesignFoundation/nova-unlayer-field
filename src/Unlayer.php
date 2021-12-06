@@ -54,7 +54,7 @@ class Unlayer extends Code
      * Set generated HTML code that can be used on details page.
      * @param string|callable():string $html
      */
-    final public function html(array | callable $html): static
+    final public function html(string | callable $html): static
     {
         $html = is_callable($html)
             ? $html()
