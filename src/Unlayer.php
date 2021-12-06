@@ -56,6 +56,7 @@ class Unlayer extends Code
      */
     final public function html(string | callable $html): static
     {
+        /** @var string $html */
         $html = is_callable($html)
             ? $html()
             : $html;

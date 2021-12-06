@@ -75,20 +75,6 @@ Please see [Releases](https://github.com/InteractionDesignFoundation/nova-unlaye
 Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
 
 
-### Compiling Assets
-
-```bash
-# Compile and minify your assets:
-npm run prod
-
-# Compile your assets for local development:
-npm run dev
-
-# Run the NPM "watch" command to auto-compile your assets when they are changed:
-npm run watch
-```
-
-
 ## License
 
 The MIT License (MIT). Please see [License File](LICENSE) for more information.

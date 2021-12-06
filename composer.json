@@ -8,10 +8,20 @@
     ],
     "license": "MIT",
     "require": {
-        "php": "^8.0",
-        "ext-json": "*"
+        "php": ">=8.0",
+        "ext-json": "*",
+        "laravel/nova": "^3.0"
     },
-    "require-dev": {},
+    "require-dev": {
+        "mockery/mockery": "^1.4",
+        "orchestra/testbench": "^6.0",
+        "phpunit/phpunit": "^9.4"
+    },
+    "repositories": [
+        {
+            "type": "composer", "url": "https://nova.laravel.com"
+        }
+    ],
     "autoload": {
         "psr-4": {
             "InteractionDesignFoundation\\NovaUnlayerField\\": "src/"
@@ -19,7 +29,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Tests\\": "tests/"
+            "InteractionDesignFoundation\\NovaUnlayerField\\Tests\\": "tests"
         }
     },
     "extra": {
@@ -33,5 +43,8 @@
         "sort-packages": true
     },
     "minimum-stability": "dev",
-    "prefer-stable": true
+    "prefer-stable": true,
+    "scripts": {
+        "test": "phpunit"
+    }
 }
