@@ -15,4 +15,28 @@ final class UnlayerTest extends TestCase
 
         $this->assertSame('<p>Hello!</p>', $field->meta()['html'] ?? null);
     }
+
+    /** @test */
+    public function it_accepts_array_as_config(): void
+    {
+        $field = new Unlayer('any_name');
+
+        $field->config(['projectId' => 'XXX']);
+
+        $this->assertArrayHasKey('projectId', $field->meta()['config']);
+        $this->assertSame('XXX', $field->meta()['config']['projectId']);
+    }
+
+    /** @test */
+    public function it_accepts_callable_as_config(): void
+    {
+        $field = new Unlayer('any_name');
+
+        $field->config(function () {
+            return ['projectId' => 'XXX'];
+        });
+
+        $this->assertArrayHasKey('projectId', $field->meta()['config']);
+        $this->assertSame('XXX', $field->meta()['config']['projectId']);
+    }
 }
