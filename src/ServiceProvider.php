@@ -19,6 +19,10 @@ class ServiceProvider extends BasicServiceProvider
         ]);
 
         $this->registerTranslations();
+
+        if ($this->app->runningInConsole()) {
+            $this->registerResources();
+        }
     }
 
     protected function registerTranslations(): void
@@ -27,5 +31,12 @@ class ServiceProvider extends BasicServiceProvider
 
         Nova::translations(__DIR__."/../resources/lang/$currentLocale.json");
         Nova::translations(resource_path("lang/vendor/nova-unlayer-field/$currentLocale.json"));
+    }
+
+    private function registerResources(): void
+    {
+        $this->publishes([
+            __DIR__ . '/../config/unlayer.php' => config_path('unlayer.php'),
+        ], 'config');
     }
 }
