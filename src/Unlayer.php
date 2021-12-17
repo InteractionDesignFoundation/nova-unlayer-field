@@ -7,6 +7,9 @@ use Laravel\Nova\Http\Requests\NovaRequest;
 
 class Unlayer extends Code
 {
+    public const MODE_EMAIL = 'email';
+    public const MODE_WEB = 'web';
+
     /**
      * The field's component.
      * @var string
@@ -97,7 +100,7 @@ class Unlayer extends Code
     private function defaultUnlayerConfig(): array
     {
         return [
-            'displayMode' => 'email',
+            'displayMode' => self::MODE_EMAIL,
             'locale' => app()->getLocale(),
         ];
     }
