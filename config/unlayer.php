@@ -23,5 +23,5 @@ return [
     | 1. Open Unlayer dabshboard and open https://dashboard.unlayer.com/projects
     | 2. Select a project and template, URL will be like https://dashboard.unlayer.com/projects/42/design/templates/43, where 42 is a project ID, 43 is a temple ID.
     */
-    'template_id' => env('UNLAYER_TEMPLATE_ID'),
+    'template_id' => env('UNLAYER_DEFAULT_TEMPLATE_ID'),
 ];
