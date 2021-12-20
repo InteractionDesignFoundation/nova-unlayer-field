@@ -2,7 +2,10 @@
 
 namespace InteractionDesignFoundation\NovaUnlayerField\Tests;
 
+use Illuminate\Database\Eloquent\Model;
 use InteractionDesignFoundation\NovaUnlayerField\Unlayer;
+use Laravel\Nova\Fields\Field;
+use Laravel\Nova\Http\Requests\NovaRequest;
 
 final class UnlayerTest extends TestCase
 {
@@ -14,6 +17,26 @@ final class UnlayerTest extends TestCase
         $field->html(static fn (): string => '<p>Hello!</p>');
 
         $this->assertSame('<p>Hello!</p>', $field->meta()['html'] ?? null);
+    }
+
+    /** @test */
+    public function it_properly_runs_savingCallback(): void
+    {
+        $inMemoryModel = new class extends Model {
+            public string $design = '';
+            public string $html = '';
+        };
+        $field = Unlayer::make('Design', 'design')
+            ->savingCallback(function (NovaRequest $request, $attribute, Model $model, $outputHtmlFieldName) {
+                $model->html = $request->input($outputHtmlFieldName);
+            });
+
+        $this->emulateNovaUpdateRequestForSingleField($field, 'design', $inMemoryModel, [
+            'design' => '{}',
+            'design_html' => '<p>Hello!</p>', // automatically added field. Pattern: [original field name] + _html (in this case "design" + "_html")
+        ]);
+
+        $this->assertSame('<p>Hello!</p>', $inMemoryModel->html);
     }
 
     /** @test */
@@ -38,5 +61,17 @@ final class UnlayerTest extends TestCase
 
         $this->assertArrayHasKey('projectId', $field->meta()['config']);
         $this->assertSame('XXX', $field->meta()['config']['projectId']);
+    }
+
+    /**
+     * White box testing of Nova field needed to unsure
+     * that custom functionality [savingCallback() method] works as expected.
+     * @param array<string, mixed> $resourceUpdateRequestData
+     * @return void
+     */
+    private function emulateNovaUpdateRequestForSingleField(Field $field, string $fieldAttributeName, Model $model, array $resourceUpdateRequestData): void
+    {
+        $request = NovaRequest::create('', 'POST', $resourceUpdateRequestData);
+        $field->fillInto($request, $model, $fieldAttributeName);
     }
 }
