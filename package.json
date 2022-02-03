@@ -12,7 +12,6 @@
         "production": "mix --production"
     },
     "devDependencies": {
-        "cross-env": "^5.0.0",
         "laravel-mix": "^6.0.41",
         "laravel-nova": "^1.0",
         "vue-loader": "^15.9.8",
