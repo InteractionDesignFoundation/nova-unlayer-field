@@ -2,10 +2,10 @@
 
 namespace InteractionDesignFoundation\NovaUnlayerField;
 
-use Laravel\Nova\Fields\Code;
+use Laravel\Nova\Fields\Field;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
-class Unlayer extends Code
+class Unlayer extends Field
 {
     public const MODE_EMAIL = 'email';
     public const MODE_WEB = 'web';
@@ -23,7 +23,7 @@ class Unlayer extends Code
     public $savingCallback;
 
     /** @var string Height of the editor (with units) */
-    public $height = '800px';
+    public string $height = '800px';
 
     /**
      * Specify Unlayer config
@@ -54,7 +54,7 @@ class Unlayer extends Code
     }
 
     /**
-     * Set generated HTML code that can be used on details page.
+     * Set generated HTML-code that can be used on details page.
      * @param string|callable():string $html
      */
     final public function html(string | callable $html): static
@@ -76,6 +76,49 @@ class Unlayer extends Code
         return $this->withMeta(['plugins' => $plugins]);
     }
 
+
+    /**
+     * Set the Code editor to display all of its contents.
+     */
+    public function fullHeight(): static
+    {
+        $this->height = '100%';
+
+        return $this;
+    }
+
+    /**
+     * Set the visual height of the Code editor to automatic.
+     */
+    public function autoHeight(): static
+    {
+        $this->height = 'auto';
+
+        return $this;
+    }
+
+    /**
+     * Set the visual height of the Unlayer editor (with units).
+     */
+    public function height(string $height): static
+    {
+        $this->height = $height;
+
+        return $this;
+    }
+
+    /**
+     * Prepare the field for JSON serialization.
+     *
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return array_merge(parent::jsonSerialize(), [
+            'height' => $this->height,
+        ]);
+    }
+
     /**
      * Hydrate the given attribute on the model based on the incoming request.
      * @see \Laravel\Nova\Fields\Field::fillAttributeFromRequest
@@ -85,7 +128,7 @@ class Unlayer extends Code
      * @param string $attribute
      * @return void
      */
-    protected function fillAttributeFromRequest(NovaRequest $request, $requestAttribute, $model, $attribute)
+    protected function fillAttributeFromRequest(NovaRequest $request, $requestAttribute, $model, $attribute): void
     {
         if (is_callable($this->savingCallback)) {
             call_user_func($this->savingCallback, $request, $requestAttribute, $model, "{$requestAttribute}_html");
