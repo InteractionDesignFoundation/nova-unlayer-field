@@ -43,9 +43,11 @@ To access it, please use `savingCallback()` method (see an extended example belo
 Basic field config:
 
 ```php
+use  \InteractionDesignFoundation\NovaUnlayerField\Unlayer;
+
 public function fields()
 {
-    return [ 
+    return [
         Unlayer::make('Content', 'design')->config([
             'projectId' => config('unlayer.project_id'),
 

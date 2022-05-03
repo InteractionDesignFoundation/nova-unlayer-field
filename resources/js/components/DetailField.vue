@@ -1,11 +1,11 @@
 <template>
-    <panel-item :field="field">
+    <PanelItem :field="field">
         <template slot="value">
             <div class="overflow-hidden">
                 <iframe :id="iframeId" sandbox="allow-scripts allow-same-origin" importance="low" width="100%"></iframe>
             </div>
         </template>
-    </panel-item>
+    </PanelItem>
 </template>
 
 <script>

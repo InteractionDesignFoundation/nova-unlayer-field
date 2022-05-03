@@ -10,15 +10,16 @@
     "require": {
         "php": ">=8.0",
         "ext-json": "*",
-        "laravel/nova": "^3.0"
+        "laravel/nova": "^4.0"
     },
     "require-dev": {
-        "orchestra/testbench": "^6.0",
+        "orchestra/testbench": "^7.0",
         "phpunit/phpunit": "^9.5"
     },
     "repositories": [
         {
-            "type": "composer", "url": "https://nova.laravel.com"
+            "type": "composer",
+            "url": "https://nova.laravel.com"
         }
     ],
     "autoload": {
@@ -44,6 +45,6 @@
     "minimum-stability": "dev",
     "prefer-stable": true,
     "scripts": {
-        "test": "phpunit"
+        "test": "phpunit --colors=always"
     }
 }

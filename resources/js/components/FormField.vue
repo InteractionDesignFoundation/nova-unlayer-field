@@ -1,10 +1,6 @@
 <template>
-    <default-field
-        :field="field"
-        :errors="errors"
-        :full-width-content="true"
-    >
-        <template slot="field">
+    <DefaultField :field="field" :errors="errors" :show-help-text="showHelpText" :full-width-content="true">
+        <template #field>
             <div class="fullscreenable">
                 <div class="unlayerControls flex">
                     <button
@@ -28,7 +24,7 @@
                 />
             </div>
         </template>
-    </default-field>
+    </DefaultField>
 </template>
 
 <script>
@@ -196,7 +192,9 @@
                 const controls = this.$el.querySelector('.unlayerControls');
                 controls.classList.toggle('stickyControls');
 
-                const trans = Nova.app.$options.methods.__;
+                const trans = function (key) {
+                    return Nova.config('translations')[key];
+                };
 
                 const toggleButton = controls.querySelector(`#fullscreenToggleButton`);
                 unlayerEditorContainer.classList.contains('fullscreen')
