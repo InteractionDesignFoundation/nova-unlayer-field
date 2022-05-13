@@ -4,7 +4,8 @@
     "keywords": [
         "laravel",
         "nova",
-        "laravel-nova-field"
+        "laravel-nova-field",
+        "html"
     ],
     "license": "MIT",
     "require": {
