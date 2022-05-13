@@ -43,7 +43,7 @@ To access it, please use `savingCallback()` method (see an extended example belo
 Basic field config:
 
 ```php
-use  \InteractionDesignFoundation\NovaUnlayerField\Unlayer;
+use InteractionDesignFoundation\NovaUnlayerField\Unlayer;
 
 public function fields()
 {
