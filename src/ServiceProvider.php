@@ -7,10 +7,10 @@ use Laravel\Nova\Nova;
 
 class ServiceProvider extends BasicServiceProvider
 {
-    /** @inheritDoc */
+    /** Bootstrap any application services. */
     public function boot(): void
     {
-        Nova::serving(function () {
+        Nova::serving(static function () {
             Nova::script('nova-unlayer-field', __DIR__.'/../dist/js/field.js');
         });
 

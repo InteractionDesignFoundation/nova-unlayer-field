@@ -14,15 +14,21 @@
         "laravel/nova": "^4.0"
     },
     "require-dev": {
-        "orchestra/testbench": "^7.0",
+        "ergebnis/composer-normalize": "^2.26",
+        "orchestra/testbench": "^7.4",
         "phpunit/phpunit": "^9.5"
     },
     "repositories": [
         {
             "type": "composer",
-            "url": "https://nova.laravel.com"
+            "url": "https://nova.laravel.com",
+            "only": [
+                "laravel/nova"
+            ]
         }
     ],
+    "minimum-stability": "dev",
+    "prefer-stable": true,
     "autoload": {
         "psr-4": {
             "InteractionDesignFoundation\\NovaUnlayerField\\": "src/"
@@ -33,6 +39,12 @@
             "InteractionDesignFoundation\\NovaUnlayerField\\Tests\\": "tests"
         }
     },
+    "config": {
+        "allow-plugins": {
+            "ergebnis/composer-normalize": true
+        },
+        "sort-packages": true
+    },
     "extra": {
         "laravel": {
             "providers": [
@@ -40,11 +52,6 @@
             ]
         }
     },
-    "config": {
-        "sort-packages": true
-    },
-    "minimum-stability": "dev",
-    "prefer-stable": true,
     "scripts": {
         "test": "phpunit --colors=always"
     }

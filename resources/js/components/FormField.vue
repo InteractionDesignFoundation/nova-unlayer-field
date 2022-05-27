@@ -49,9 +49,7 @@
         },
 
         methods: {
-            /**
-             * Register listeners, load initial template, etc.
-             */
+            /** Register listeners, load initial template, etc. */
             editorLoaded() {
                 if (this.field.value !== null) {
                     this.$refs.editor.loadDesign(this.field.value);
