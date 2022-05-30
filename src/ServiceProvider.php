@@ -5,6 +5,10 @@ namespace InteractionDesignFoundation\NovaUnlayerField;
 use Illuminate\Support\ServiceProvider as BasicServiceProvider;
 use Laravel\Nova\Nova;
 
+/**
+ * @phpcs:disable SlevomatCodingStandard.Classes.RequireAbstractOrFinal
+ * @noRector \Rector\Privatization\Rector\Class_\FinalizeClassesWithoutChildrenRector
+ */
 class ServiceProvider extends BasicServiceProvider
 {
     /** Bootstrap any application services. */
@@ -36,7 +40,7 @@ class ServiceProvider extends BasicServiceProvider
     private function registerResources(): void
     {
         $this->publishes([
-            __DIR__ . '/../config/unlayer.php' => config_path('unlayer.php'),
+            __DIR__.'/../config/unlayer.php' => config_path('unlayer.php'),
         ], 'config');
     }
 }

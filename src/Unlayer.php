@@ -5,6 +5,10 @@ namespace InteractionDesignFoundation\NovaUnlayerField;
 use Laravel\Nova\Fields\Field;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
+/**
+ * @phpcs:disable SlevomatCodingStandard.Classes.RequireAbstractOrFinal
+ * @noRector \Rector\Privatization\Rector\Class_\FinalizeClassesWithoutChildrenRector
+ */
 class Unlayer extends Field
 {
     public const MODE_EMAIL = 'email';
@@ -76,10 +80,7 @@ class Unlayer extends Field
         return $this->withMeta(['plugins' => $plugins]);
     }
 
-
-    /**
-     * Set the Code editor to display all of its contents.
-     */
+    /** Set the Code editor to display all of its contents. */
     public function fullHeight(): static
     {
         $this->height = '100%';
@@ -109,7 +110,6 @@ class Unlayer extends Field
 
     /**
      * Prepare the field for JSON serialization.
-     *
      * @return array<string, mixed>
      */
     public function jsonSerialize(): array

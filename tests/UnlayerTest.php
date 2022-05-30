@@ -20,14 +20,14 @@ final class UnlayerTest extends TestCase
     }
 
     /** @test */
-    public function it_properly_runs_savingCallback(): void
+    public function it_properly_runs_saving_callback(): void
     {
         $inMemoryModel = new class extends Model {
             public string $design = '';
             public string $html = '';
         };
         $field = Unlayer::make('Design', 'design')
-            ->savingCallback(function (NovaRequest $request, $attribute, Model $model, $outputHtmlFieldName) {
+            ->savingCallback(static function (NovaRequest $request, $attribute, Model $model, $outputHtmlFieldName) {
                 $model->html = $request->input($outputHtmlFieldName);
             });
 
@@ -55,7 +55,7 @@ final class UnlayerTest extends TestCase
     {
         $field = new Unlayer('any_name');
 
-        $field->config(function () {
+        $field->config(static function () {
             return ['projectId' => 'XXX'];
         });
 
@@ -67,10 +67,13 @@ final class UnlayerTest extends TestCase
      * White box testing of Nova field needed to unsure
      * that custom functionality [savingCallback() method] works as expected.
      * @param array<string, mixed> $resourceUpdateRequestData
-     * @return void
      */
-    private function emulateNovaUpdateRequestForSingleField(Field $field, string $fieldAttributeName, Model $model, array $resourceUpdateRequestData): void
-    {
+    private function emulateNovaUpdateRequestForSingleField(
+        Field $field,
+        string $fieldAttributeName,
+        Model $model,
+        array $resourceUpdateRequestData
+    ): void {
         $request = NovaRequest::create('', 'POST', $resourceUpdateRequestData);
         $field->fillInto($request, $model, $fieldAttributeName);
     }
