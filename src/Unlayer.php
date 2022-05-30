@@ -2,12 +2,14 @@
 
 namespace InteractionDesignFoundation\NovaUnlayerField;
 
+use Illuminate\Support\Facades\App;
 use Laravel\Nova\Fields\Field;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
 /**
  * @phpcs:disable SlevomatCodingStandard.Classes.RequireAbstractOrFinal
  * @noRector \Rector\Privatization\Rector\Class_\FinalizeClassesWithoutChildrenRector
+ * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.UselessAnnotation
  */
 class Unlayer extends Field
 {
@@ -32,7 +34,8 @@ class Unlayer extends Field
     /**
      * Specify Unlayer config
      * @see https://docs.unlayer.com/docs/getting-started#section-configuration-options
-     * @param array|callable():array $config
+     * @param array<string, mixed>|callable():array<string, mixed> $config
+     * @phpcsSuppress SlevomatCodingStandard.TypeHints.DisallowMixedTypeHint
      */
     final public function config(array | callable $config): static
     {
@@ -47,9 +50,7 @@ class Unlayer extends Field
         ]);
     }
 
-    /**
-     * @param null|callable(\Laravel\Nova\Http\Requests\NovaRequest, string, \Illuminate\Database\Eloquent\Model, string):void $callback
-     */
+    /** @param null|callable(\Laravel\Nova\Http\Requests\NovaRequest, string, \Illuminate\Database\Eloquent\Model, string):void $callback */
     final public function savingCallback(?callable $callback): static
     {
         $this->savingCallback = $callback;
@@ -111,6 +112,7 @@ class Unlayer extends Field
     /**
      * Prepare the field for JSON serialization.
      * @return array<string, mixed>
+     * @phpcsSuppress SlevomatCodingStandard.TypeHints.DisallowMixedTypeHint
      */
     public function jsonSerialize(): array
     {
@@ -140,11 +142,12 @@ class Unlayer extends Field
         }
     }
 
+    /** @return array<string, string> */
     private function defaultUnlayerConfig(): array
     {
         return [
             'displayMode' => self::MODE_EMAIL,
-            'locale' => app()->getLocale(),
+            'locale' => App::getLocale(),
         ];
     }
 }

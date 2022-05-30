@@ -2,6 +2,7 @@
 
 namespace InteractionDesignFoundation\NovaUnlayerField;
 
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\ServiceProvider as BasicServiceProvider;
 use Laravel\Nova\Nova;
 
@@ -31,7 +32,7 @@ class ServiceProvider extends BasicServiceProvider
 
     protected function registerTranslations(): void
     {
-        $currentLocale = app()->getLocale();
+        $currentLocale = App::getLocale();
 
         Nova::translations(__DIR__."/../resources/lang/$currentLocale.json");
         Nova::translations(resource_path("lang/vendor/nova-unlayer-field/$currentLocale.json"));

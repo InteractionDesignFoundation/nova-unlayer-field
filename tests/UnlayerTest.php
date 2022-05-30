@@ -67,6 +67,7 @@ final class UnlayerTest extends TestCase
      * White box testing of Nova field needed to unsure
      * that custom functionality [savingCallback() method] works as expected.
      * @param array<string, mixed> $resourceUpdateRequestData
+     * @phpcsSuppress SlevomatCodingStandard.TypeHints.DisallowMixedTypeHint
      */
     private function emulateNovaUpdateRequestForSingleField(
         Field $field,

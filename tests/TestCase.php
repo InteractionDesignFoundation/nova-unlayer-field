@@ -7,12 +7,12 @@ use Orchestra\Testbench\TestCase as OrchestraTestCase;
 
 abstract class TestCase extends OrchestraTestCase
 {
-    protected function setUp(): void
-    {
-        parent::setUp();
-    }
-
-    protected function getPackageProviders($app)
+    /**
+     * {@inheritDoc}
+     * @param \Illuminate\Foundation\Application $app
+     * @return array<int, class-string<\Illuminate\Support\ServiceProvider>>
+     */
+    protected function getPackageProviders($app): array
     {
         return [
             ServiceProvider::class,
