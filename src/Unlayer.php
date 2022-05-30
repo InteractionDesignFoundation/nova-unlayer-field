@@ -7,9 +7,10 @@ use Laravel\Nova\Fields\Field;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
 /**
+ * @phpcs:disable SlevomatCodingStandard.TypeHints.ParameterTypeHint.UselessAnnotation
+ * @phpcs:disable SlevomatCodingStandard.TypeHints.ReturnTypeHint.UselessAnnotation
  * @phpcs:disable SlevomatCodingStandard.Classes.RequireAbstractOrFinal
  * @noRector \Rector\Privatization\Rector\Class_\FinalizeClassesWithoutChildrenRector
- * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.UselessAnnotation
  */
 class Unlayer extends Field
 {
