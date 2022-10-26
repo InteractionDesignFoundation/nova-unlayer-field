@@ -1,6 +1,6 @@
 {
     "name": "interaction-design-foundation/nova-unlayer-field",
-    "description": "A Laravel Nova field for Unlayer to compose emails and landing pages",
+    "description": "A Laravel Nova field for Unlayer to compose emails and landing pages.",
     "keywords": [
         "laravel",
         "nova",
