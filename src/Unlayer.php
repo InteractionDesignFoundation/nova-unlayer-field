@@ -24,6 +24,12 @@ class Unlayer extends Field
     public $component = 'nova-unlayer-field';
 
     /**
+     * Indicates if the element should be shown on the index view.
+     * @var (callable():bool)|bool
+     */
+    public $showOnIndex = false;
+
+    /**
      * A function to call on filling Model attributes from Request
      * @var null|callable(\Laravel\Nova\Http\Requests\NovaRequest, string, \Illuminate\Database\Eloquent\Model, string):void $callback
      */
