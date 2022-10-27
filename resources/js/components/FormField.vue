@@ -10,7 +10,7 @@
                 <div class="unlayerControls flex">
                     <button
                             id="fullscreenToggleButton"
-                            class="text-xs bg-90 hover:bg-black text-white font-semibold rounded-sm px-4 py-1 m-1 border"
+                            class="text-xs bg-90 font-semibold rounded-sm px-4 py-1 m-1 border"
                             @click="toggleFullscreen"
                             type="button">
                         {{ __('Enter fullscreen') }}
