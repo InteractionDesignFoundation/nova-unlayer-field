@@ -1,5 +1,10 @@
 <template>
-    <DefaultField :field="field" :errors="errors" :show-help-text="showHelpText" :full-width-content="true">
+    <DefaultField
+        :field="field"
+        :errors="errors"
+        :show-help-text="showHelpText"
+        :full-width-content="true"
+    >
         <template #field>
             <div class="fullscreenable">
                 <div class="unlayerControls flex">

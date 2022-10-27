@@ -1,6 +1,6 @@
 <template>
-    <PanelItem :field="field">
-        <template slot="value">
+    <PanelItem :index="index" :field="field">
+        <template #value>
             <div class="overflow-hidden">
                 <iframe :id="iframeId" sandbox="allow-scripts allow-same-origin" importance="low" width="100%"></iframe>
             </div>
@@ -9,36 +9,37 @@
 </template>
 
 <script>
-    export default {
-        props: ['resource', 'resourceName', 'resourceId', 'field'],
+export default {
+    props: ['index', 'resource', 'resourceName', 'resourceId', 'field'],
 
-        beforeCreate() {
-            const uniqueId = Math.random().toString(36).slice(-5);
-            this.iframeId = `previewUnlayerHtmlIframe-${uniqueId}`;
+    beforeCreate() {
+        const uniqueId = Math.random().toString(36).slice(-5);
+        this.iframeId = `previewUnlayerHtmlIframe-${uniqueId}`;
+    },
+
+    mounted() {
+        let iframe = document.getElementById(this.iframeId);
+        this.setIframeContent(iframe, this.field.html);
+        this.resizeIFrameToFitContent(iframe)
+    },
+
+    methods: {
+        /**
+         * @param {HTMLIFrameElement} iframe
+         * @param {string} htmlContent
+         */
+        setIframeContent: function (iframe, htmlContent) {
+            const container = document.createElement('div');
+            container.innerHTML = htmlContent;
+            iframe.contentWindow.document.body.appendChild(container);
         },
 
-        mounted() {
-            let iframe = document.getElementById(this.iframeId);
-            this.setIframeContent(iframe, this.field.html);
-            this.resizeIFrameToFitContent(iframe)
-        },
-
-        methods: {
-            /**
-             * @param {HTMLIFrameElement} iframe
-             * @param {string} htmlContent
-             */
-            setIframeContent: function(iframe, htmlContent) {
-                const container = document.createElement('div');
-                container.innerHTML = htmlContent;
-                iframe.contentWindow.document.body.appendChild(container);
-            },
-            /**
-             * @param {HTMLIFrameElement} iframe
-             */
-            resizeIFrameToFitContent: function (iframe) {
-                iframe.height = iframe.contentWindow.document.body.scrollHeight;
-            }
-        },
-    }
+        /**
+         * @param {HTMLIFrameElement} iframe
+         */
+        resizeIFrameToFitContent: function (iframe) {
+            iframe.height = iframe.contentWindow.document.body.scrollHeight;
+        }
+    },
+}
 </script>
