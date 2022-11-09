@@ -57,7 +57,7 @@
             /** Register listeners, load initial template, etc. */
             editorLoaded() {
                 if (this.field.value !== null) {
-                    this.$refs.editor.loadDesign(this.field.value);
+                    this.$refs.editor.loadDesign(this.unProxy(this.field.value));
                 }
 
                 /** @see https://docs.unlayer.com/docs/events */
@@ -69,7 +69,15 @@
             },
 
             /**
-             * @param {Array} pluginsUrls
+             * @param {Proxy<Object>} proxyInstance
+             * @return {Object}
+             */
+            unProxy(proxyInstance) {
+                return JSON.parse(JSON.stringify(proxyInstance));
+            },
+
+            /**
+             * @param {Array<string>} pluginsUrls
              */
             loadPlugins(pluginsUrls) {
                 if (window.unlayer.plugins === undefined) {
