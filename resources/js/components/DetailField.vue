@@ -13,13 +13,12 @@ export default {
     props: ['index', 'resource', 'resourceName', 'resourceId', 'field'],
 
     beforeCreate() {
-        const uniqueId = Math.random().toString(36).slice(-5);
-        this.iframeId = `previewUnlayerHtmlIframe-${uniqueId}`;
+        this.iframeId = `${this.field.uniqueKey}-iframe`;
     },
 
     mounted() {
         let iframe = document.getElementById(this.iframeId);
-        this.setIframeContent(iframe, this.field.html);
+        this.setIframeContent(iframe, this.field.html || 'HTML is not set for preview, use <code>Unlayer::html()</code>');
         this.resizeIFrameToFitContent(iframe)
     },
 
