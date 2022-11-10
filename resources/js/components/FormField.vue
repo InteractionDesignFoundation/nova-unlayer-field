@@ -17,7 +17,7 @@
                     </button>
                 </div>
 
-                <unlayer-editor
+                <UnlayerEditor
                     class="form-input-bordered"
                     :style="{minHeight: containerHeight}"
                     ref="editor"
@@ -25,7 +25,7 @@
                     :locale=field.config.locale
                     :projectId=field.config.projectId
                     :templateId="field.value ? null : field.config.templateId"
-                    :options=field.config
+                    :options=unProxy(field.config)
                 />
             </div>
         </template>
@@ -33,7 +33,7 @@
 </template>
 
 <script>
-    import EmailEditor from './UnlayerEditor'
+    import UnlayerEditor from './UnlayerEditor.vue';
     import { FormField, HandlesValidationErrors } from 'laravel-nova'
 
     const defaultHeight = '700px';
@@ -42,7 +42,7 @@
         mixins: [FormField, HandlesValidationErrors],
 
         components: {
-            EmailEditor
+            UnlayerEditor,
         },
 
         props: ['resourceName', 'resourceId', 'field'],
