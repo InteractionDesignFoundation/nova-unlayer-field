@@ -4,8 +4,6 @@
 
 <script>
     export default {
-        name: 'unlayer-editor',
-
         props: {
             options: Object,
             projectId: {
