@@ -63,7 +63,7 @@
                 /** @see https://docs.unlayer.com/docs/events */
                 window.unlayer.addEventListener('design:loaded', this.handleDesignLoaded);
                 window.unlayer.addEventListener('design:updated', this.handleDesignUpdated);
-                window.unlayer.addEventListener('onImageUpload', this.handleImageUploaded);
+                window.unlayer.addEventListener('image:uploaded', this.handleImageUploaded);
 
                 this.loadPlugins(this.field.plugins);
             },
@@ -183,7 +183,7 @@
             },
 
             /**
-             * @param {Object} imageData
+             * @param {{image:string, url:string, width:int, height:int}} imageData
              */
             handleImageUploaded(imageData) {
                 Nova.$emit('unlayer:image:uploaded', {
