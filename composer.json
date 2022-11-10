@@ -14,8 +14,7 @@
         "laravel/nova": "^4.0"
     },
     "require-dev": {
-        "ergebnis/composer-normalize": "^2.26",
-        "orchestra/testbench": "^7.4",
+        "orchestra/testbench": "^7.11",
         "phpunit/phpunit": "^9.5"
     },
     "repositories": [
@@ -41,7 +40,7 @@
     },
     "config": {
         "allow-plugins": {
-            "ergebnis/composer-normalize": true
+
         },
         "sort-packages": true
     },
