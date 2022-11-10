@@ -1,13 +1,13 @@
 {
     "name": "interaction-design-foundation/nova-unlayer-field",
     "description": "A Laravel Nova field for Unlayer to compose emails and landing pages.",
+    "license": "MIT",
     "keywords": [
         "laravel",
         "nova",
         "laravel-nova-field",
         "html"
     ],
-    "license": "MIT",
     "require": {
         "php": ">=8.0",
         "ext-json": "*",
