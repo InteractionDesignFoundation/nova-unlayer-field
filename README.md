@@ -1,10 +1,10 @@
 # Nova Unlayer Field
 
+![image](https://user-images.githubusercontent.com/5278175/144930172-1bf257ee-54a6-4c88-a3a8-772a1d687677.png)
+
 [![Latest Stable Version](https://poser.pugx.org/interaction-design-foundation/nova-unlayer-field/v)](https://packagist.org/packages/interaction-design-foundation/nova-unlayer-field)
 [![Total Downloads](https://poser.pugx.org/interaction-design-foundation/nova-unlayer-field/downloads)](https://packagist.org/packages/interaction-design-foundation/nova-unlayer-field)
 [![License](https://poser.pugx.org/interaction-design-foundation/nova-unlayer-field/license)](https://packagist.org/packages/interaction-design-foundation/nova-unlayer-field)
-
-![image](https://user-images.githubusercontent.com/5278175/144930172-1bf257ee-54a6-4c88-a3a8-772a1d687677.png)
 
 Adds a Laravel Nova field for Unlayer to compose emails and landing pages.
 
