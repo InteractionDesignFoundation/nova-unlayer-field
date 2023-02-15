@@ -1,6 +1,6 @@
 <template>
     <DefaultField
-        :field="field"
+        :field="currentField"
         :errors="errors"
         :show-help-text="showHelpText"
         :full-width-content="true"
@@ -22,10 +22,11 @@
                     :style="{minHeight: containerHeight}"
                     ref="editor"
                     @load="editorLoaded"
-                    :locale=field.config.locale
-                    :projectId=field.config.projectId
-                    :templateId="field.value ? null : field.config.templateId"
-                    :options=unProxy(field.config)
+                    :locale=currentField.config.locale
+                    :projectId=currentField.config.projectId
+                    :templateId="currentField.value ? null : currentField.config.templateId"
+                    :options=unProxy(currentField.config)
+                    :key=currentField.config.key
                 />
             </div>
         </template>
@@ -34,12 +35,12 @@
 
 <script>
     import UnlayerEditor from './UnlayerEditor.vue';
-    import { FormField, HandlesValidationErrors } from 'laravel-nova'
+    import { DependentFormField, HandlesValidationErrors } from 'laravel-nova'
 
     const defaultHeight = '700px';
 
     export default {
-        mixins: [FormField, HandlesValidationErrors],
+        mixins: [DependentFormField, HandlesValidationErrors],
 
         components: {
             UnlayerEditor,
@@ -49,15 +50,15 @@
 
         computed: {
             containerHeight: function () {
-                return this.field.height || defaultHeight;
+                return this.currentField.height || defaultHeight;
             },
         },
 
         methods: {
             /** Register listeners, load initial template, etc. */
             editorLoaded() {
-                if (this.field.value !== null) {
-                    this.$refs.editor.loadDesign(this.unProxy(this.field.value));
+                if (this.currentField.value !== null) {
+                    this.$refs.editor.loadDesign(this.unProxy(this.currentField.value));
                 }
 
                 /** @see https://docs.unlayer.com/docs/events */
@@ -65,7 +66,7 @@
                 window.unlayer.addEventListener('design:updated', this.handleDesignUpdated);
                 window.unlayer.addEventListener('image:uploaded', this.handleImageUploaded);
 
-                this.loadPlugins(this.field.plugins);
+                this.loadPlugins(this.currentField.plugins);
             },
 
             /**
@@ -97,8 +98,8 @@
              * @property {FormData} formData
              */
             fill(formData) {
-                formData.append(this.field.attribute, JSON.stringify(this.design));
-                formData.append(`${this.field.attribute}_html`, this.html);
+                formData.append(this.currentField.attribute, JSON.stringify(this.design));
+                formData.append(`${this.currentField.attribute}_html`, this.html);
             },
 
             /**
@@ -111,7 +112,7 @@
                 });
 
                 Nova.$emit('unlayer:design:loaded', {
-                    inputName: this.field.attribute,
+                    inputName: this.currentField.attribute,
                     payload: loadedDesign,
                 });
             },
@@ -177,7 +178,7 @@
                 }
 
                 Nova.$emit('unlayer:design:updated', {
-                    inputName: this.field.attribute,
+                    inputName: this.currentField.attribute,
                     payload: changeLog,
                 });
             },
@@ -187,7 +188,7 @@
              */
             handleImageUploaded(imageData) {
                 Nova.$emit('unlayer:image:uploaded', {
-                    inputName: this.field.attribute,
+                    inputName: this.currentField.attribute,
                     payload: imageData,
                 });
             },
