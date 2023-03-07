@@ -4,6 +4,7 @@ namespace InteractionDesignFoundation\NovaUnlayerField;
 
 use Illuminate\Support\Facades\App;
 use Laravel\Nova\Fields\Field;
+use Laravel\Nova\Fields\SupportsDependentFields;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
 /**
@@ -14,6 +15,7 @@ use Laravel\Nova\Http\Requests\NovaRequest;
  */
 class Unlayer extends Field
 {
+    use SupportsDependentFields;
     public const MODE_EMAIL = 'email';
     public const MODE_WEB = 'web';
 
