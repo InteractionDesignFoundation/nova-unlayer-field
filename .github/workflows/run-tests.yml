@@ -4,16 +4,16 @@ on: [ push, pull_request ]
 
 jobs:
   test:
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
     strategy:
       fail-fast: true
       matrix:
-        os: [ ubuntu-latest ]
         php: [ 8.1, 8.2 ]
         laravel: [ 10.* ]
+        testbench: [ 8.* ]
         dependency-version: [ prefer-stable ]
 
-    name: P${{ matrix.php }} - L${{ matrix.laravel }} - ${{ matrix.dependency-version }} - ${{ matrix.os }}
+    name: P${{ matrix.php }} - L${{ matrix.laravel }} - ${{ matrix.dependency-version }}
 
     steps:
       - name: Checkout code
