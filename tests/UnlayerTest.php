@@ -7,6 +7,7 @@ use InteractionDesignFoundation\NovaUnlayerField\Unlayer;
 use Laravel\Nova\Fields\Field;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
+/** @covers \InteractionDesignFoundation\NovaUnlayerField\Unlayer */
 final class UnlayerTest extends TestCase
 {
     /** @test */
