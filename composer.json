@@ -1,21 +1,23 @@
 {
     "name": "interaction-design-foundation/nova-unlayer-field",
     "description": "A Laravel Nova field for Unlayer to compose emails and landing pages.",
+    "license": "MIT",
     "keywords": [
         "laravel",
         "nova",
         "laravel-nova-field",
         "html"
     ],
-    "license": "MIT",
     "require": {
-        "php": ">=8.1",
+        "php": "^8.1",
         "ext-json": "*",
         "laravel/nova": "^4.20"
     },
     "require-dev": {
+        "interaction-design-foundation/coding-standard": "^0.2.0",
         "orchestra/testbench": "^8.3",
-        "phpunit/phpunit": "^10.0"
+        "phpunit/phpunit": "^10.5 || ^11.0",
+        "vimeo/psalm": "^5.22"
     },
     "repositories": [
         {
@@ -40,7 +42,8 @@
     },
     "config": {
         "allow-plugins": {
-            "ergebnis/composer-normalize": true
+            "ergebnis/composer-normalize": true,
+            "dealerdirect/phpcodesniffer-composer-installer": true
         },
         "sort-packages": true
     },
@@ -52,6 +55,10 @@
         }
     },
     "scripts": {
+        "cs": "@cs:fix",
+        "cs:check": "phpcs -p -s --colors --report-full --report-summary",
+        "cs:fix": "phpcbf -p --colors",
+        "psalm": "vendor/bin/psalm",
         "test": "phpunit --colors=always"
     }
 }

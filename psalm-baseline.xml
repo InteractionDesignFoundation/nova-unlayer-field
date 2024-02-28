@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<files psalm-version="5.22.2@d768d914152dbbf3486c36398802f74e80cfde48">
+  <file src="src/Unlayer.php">
+    <MethodSignatureMismatch>
+      <code><![CDATA[Unlayer]]></code>
+    </MethodSignatureMismatch>
+    <MixedArgument>
+      <code><![CDATA[$request->get($requestAttribute)]]></code>
+    </MixedArgument>
+    <MixedAssignment>
+      <code><![CDATA[$attributeValue]]></code>
+    </MixedAssignment>
+    <PropertyNotSetInConstructor>
+      <code><![CDATA[Unlayer]]></code>
+    </PropertyNotSetInConstructor>
+  </file>
+</files>
