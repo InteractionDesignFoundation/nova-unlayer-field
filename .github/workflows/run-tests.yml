@@ -4,7 +4,7 @@ on: [ push, pull_request ]
 
 jobs:
   test:
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
     strategy:
       fail-fast: true
       matrix:
@@ -43,13 +43,7 @@ jobs:
       - name: Execute tests
         run: composer test
 
-  npm:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
+      # NPM part (test whether assets can be compiled)
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
@@ -57,9 +51,10 @@ jobs:
 
       - name: Cache yarn dependencies
         uses: actions/cache@v4
-        id: yarn-node_modules-cache
+        id: npm-node_modules-cache
         with:
           path: node_modules
-          key: yarn-${{ hashFiles('packages.json') }}-node-20
+          key: npm-${{ hashFiles('package.json') }}-node-20
 
-      - run: yarn && yarn dev
+      - name: Compile assets
+        run: npm install && npm run nova:install && npm run prod
