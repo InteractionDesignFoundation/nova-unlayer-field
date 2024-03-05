@@ -8,10 +8,10 @@
     const defaultFontSizeInPx = 16;
 
     /**
-     * @typedef {UnlayerConfigNode} UnlayerConfigNode
+     * @typedef {object} UnlayerConfigNode
      * @property {string} type
-     * @property {Object} values
-     * @property {Object} [changes]
+     * @property {object} values
+     * @property {object} [changes]
      */
 
     /**
