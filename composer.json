@@ -60,6 +60,7 @@
         "cs:fix": "phpcbf -p --colors",
         "psalm": "vendor/bin/psalm",
         "sa": "@psalm",
+        "sa:bl": "cpx psalm --set-baseline=psalm-baseline.xml --long-progress --threads=1",
         "test": "phpunit --colors=always"
     }
 }
