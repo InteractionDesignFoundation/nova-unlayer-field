@@ -15,7 +15,7 @@ final class UnlayerTest extends TestCase
     {
         $field = new Unlayer('any_name');
 
-        $field->html(static fn (): string => '<p>Hello!</p>');
+        $field->html(static fn(): string => '<p>Hello!</p>');
 
         $this->assertSame('<p>Hello!</p>', $field->meta()['html'] ?? null);
     }

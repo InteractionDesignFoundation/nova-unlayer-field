@@ -16,6 +16,7 @@ use Laravel\Nova\Http\Requests\NovaRequest;
 class Unlayer extends Field
 {
     use SupportsDependentFields;
+
     public const MODE_EMAIL = 'email';
     public const MODE_WEB = 'web';
 
@@ -33,7 +34,7 @@ class Unlayer extends Field
 
     /**
      * A function to call on filling Model attributes from Request
-     * @var null|callable(\Laravel\Nova\Http\Requests\NovaRequest, string, \Illuminate\Database\Eloquent\Model, string):void $callback
+     * @var (callable(\Laravel\Nova\Http\Requests\NovaRequest, string, \Illuminate\Database\Eloquent\Model, string): void)|null $callback
      */
     public $savingCallback;
 
@@ -59,7 +60,7 @@ class Unlayer extends Field
         ]);
     }
 
-    /** @param null|callable(\Laravel\Nova\Http\Requests\NovaRequest, string, \Illuminate\Database\Eloquent\Model, string):void $callback */
+    /** @param (callable(\Laravel\Nova\Http\Requests\NovaRequest, string, \Illuminate\Database\Eloquent\Model, string): void)|null $callback */
     final public function savingCallback(?callable $callback): static
     {
         $this->savingCallback = $callback;
