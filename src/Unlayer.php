@@ -84,7 +84,7 @@ class Unlayer extends Field
 
     /**
      * Specify javascript modules to process Unlayer’s design on every design change.
-     * @param string[] $plugins
+     * @param array<string> $plugins
      */
     final public function plugins(array $plugins): static
     {
@@ -99,9 +99,7 @@ class Unlayer extends Field
         return $this;
     }
 
-    /**
-     * Set the visual height of the Code editor to automatic.
-     */
+    /** Set the visual height of the Code editor to automatic. */
     public function autoHeight(): static
     {
         $this->height = 'auto';
@@ -109,9 +107,7 @@ class Unlayer extends Field
         return $this;
     }
 
-    /**
-     * Set the visual height of the Unlayer editor (with units).
-     */
+    /** Set the visual height of the Unlayer editor (with units). */
     public function height(string $height): static
     {
         $this->height = $height;

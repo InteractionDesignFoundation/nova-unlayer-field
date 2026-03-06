@@ -34,7 +34,7 @@ final class UnlayerTest extends TestCase
     #[Test]
     public function it_properly_runs_saving_callback(): void
     {
-        $inMemoryModel = new class extends Model {
+        $inMemoryModel = new class () extends Model {
             public string $design = '';
             public string $html = '';
         };
