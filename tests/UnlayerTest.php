@@ -6,11 +6,22 @@ use Illuminate\Database\Eloquent\Model;
 use InteractionDesignFoundation\NovaUnlayerField\Unlayer;
 use Laravel\Nova\Fields\Field;
 use Laravel\Nova\Http\Requests\NovaRequest;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Test;
 
-/** @covers \InteractionDesignFoundation\NovaUnlayerField\Unlayer */
+#[CoversClass(Unlayer::class)]
 final class UnlayerTest extends TestCase
 {
-    /** @test */
+    #[Test]
+    public function it_can_be_instantiated(): void
+    {
+        $field = new Unlayer('Design');
+
+        $this->assertInstanceOf(Unlayer::class, $field);
+        $this->assertSame('Design', $field->name);
+    }
+
+    #[Test]
     public function it_resolves_callback_to_html_code(): void
     {
         $field = new Unlayer('any_name');
@@ -20,7 +31,7 @@ final class UnlayerTest extends TestCase
         $this->assertSame('<p>Hello!</p>', $field->meta()['html'] ?? null);
     }
 
-    /** @test */
+    #[Test]
     public function it_properly_runs_saving_callback(): void
     {
         $inMemoryModel = new class extends Model {
@@ -40,7 +51,7 @@ final class UnlayerTest extends TestCase
         $this->assertSame('<p>Hello!</p>', $inMemoryModel->html);
     }
 
-    /** @test */
+    #[Test]
     public function it_accepts_array_as_config(): void
     {
         $field = new Unlayer('any_name');
@@ -51,7 +62,7 @@ final class UnlayerTest extends TestCase
         $this->assertSame('XXX', $field->meta()['config']['projectId']);
     }
 
-    /** @test */
+    #[Test]
     public function it_accepts_callable_as_config(): void
     {
         $field = new Unlayer('any_name');
