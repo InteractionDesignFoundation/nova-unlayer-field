@@ -19,7 +19,7 @@
         "laravel-mix": "6.0.49",
         "lodash": "4.18.1",
         "postcss": "8.5.15",
-        "vue-loader": "16.8.3"
+        "vue-loader": "17.4.2"
     },
     "dependencies": {}
 }
