@@ -20,9 +20,6 @@ You can install the package in to a Laravel app that uses [Nova](https://nova.la
 composer require interaction-design-foundation/nova-unlayer-field
 ```
 
-⚠️ For PHP 7.1 - PHP 7.4 please use [version 0.2.2](https://github.com/InteractionDesignFoundation/nova-unlayer-field/tree/0.2.2) (it uses another namespace).
-
-
 ### Optional: publish the configuration
 
 Run this on the command line from the root of your project:

@@ -1,5 +1,16 @@
 /*!
- * vuex v4.0.2
- * (c) 2021 Evan You
+ * The buffer module from node.js, for the browser.
+ *
+ * @author   Feross Aboukhadijeh <http://feross.org>
+ * @license  MIT
+ */
+
+/*!
+ * vuex v4.1.0
+ * (c) 2022 Evan You
  * @license MIT
  */
+
+/*! Axios v1.18.1 Copyright (c) 2026 Matt Zabriskie and contributors */
+
+/*! ieee754. BSD-3-Clause License. Feross Aboukhadijeh <https://feross.org/opensource> */
