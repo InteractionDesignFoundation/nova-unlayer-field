@@ -22,6 +22,6 @@
         "vue-loader": "17.4.2"
     },
     "overrides": {
-        "webpack": "5.74.0"
+        "webpack": "5.104.1"
     }
 }
