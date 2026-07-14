@@ -39,7 +39,7 @@ final class UnlayerTest extends TestCase
             public string $html = '';
         };
         $field = Unlayer::make('Design', 'design')
-            ->savingCallback(static function (NovaRequest $request, $attribute, Model $model, $outputHtmlFieldName) {
+            ->savingCallback(static function (NovaRequest $request, $attribute, Model $model, $outputHtmlFieldName): void {
                 $model->html = $request->input($outputHtmlFieldName);
             });
 

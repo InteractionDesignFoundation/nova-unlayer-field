@@ -10,13 +10,18 @@
     errorBaseline="psalm-baseline.xml"
 >
     <projectFiles>
-        <directory name="src" />
-        <ignoreFiles>
-            <directory name="vendor" />
-        </ignoreFiles>
+        <directory name="src"/>
     </projectFiles>
+
     <disableExtensions>
-        <extension name="random"/>
         <extension name="redis"/>
     </disableExtensions>
+
+    <plugins>
+        <pluginClass class="Psalm\LaravelPlugin\Plugin">
+            <experimental value="true"/>
+            <failOnInternalError value="true"/>
+        </pluginClass>
+        <pluginClass class="InteractionDesignFoundation\PsalmLaravelNova\Plugin"/>
+    </plugins>
 </psalm>
