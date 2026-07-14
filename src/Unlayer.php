@@ -145,11 +145,7 @@ class Unlayer extends Field
     /**
      * Hydrate the given attribute on the model based on the incoming request.
      * @see \Laravel\Nova\Fields\Field::fillAttributeFromRequest
-     * @param \Laravel\Nova\Http\Requests\NovaRequest $request
-     * @param string $requestAttribute
-     * @param \Illuminate\Database\Eloquent\Model $model
-     * @param string $attribute
-     * @return void
+     * @inheritDoc
      */
     #[\Override]
     protected function fillAttributeFromRequest(
@@ -158,12 +154,14 @@ class Unlayer extends Field
         object $model,
         string $attribute
     ): void {
+        assert($model instanceof \Illuminate\Database\Eloquent\Model);
+
         if (is_callable($this->savingCallback)) {
             call_user_func($this->savingCallback, $request, $requestAttribute, $model, "{$requestAttribute}_html");
         }
 
         if ($request->exists($requestAttribute)) {
-            $model->setAttribute($attribute, json_decode((string) $request->string($requestAttribute), true));
+            $model->setAttribute($attribute, json_decode($request->string($requestAttribute)->toString(), true));
         }
     }
 

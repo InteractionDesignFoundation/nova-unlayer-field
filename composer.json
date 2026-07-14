@@ -65,8 +65,9 @@
         "phpcbf": "phpcbf -p",
         "phpcs": "phpcs -p -s --report-full --report-summary",
         "psalm": "vendor/bin/psalm",
+        "psalm:bl": "vendor/bin/psalm --set-baseline=psalm-baseline.xml",
         "sa": "@psalm",
-        "sa:bl": "cpx psalm --set-baseline=psalm-baseline.xml --long-progress --threads=1",
+        "sa:bl": "@psalm:bl",
         "test": "phpunit --colors=always"
     }
 }
