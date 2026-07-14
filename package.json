@@ -21,5 +21,7 @@
         "postcss": "8.5.16",
         "vue-loader": "16.8.3"
     },
-    "dependencies": {}
+    "overrides": {
+        "webpack": "5.74.0"
+    }
 }

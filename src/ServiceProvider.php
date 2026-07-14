@@ -8,13 +8,14 @@ use Laravel\Nova\Nova;
 /**
  * @phpcs:disable SlevomatCodingStandard.Classes.RequireAbstractOrFinal
  * @noRector \Rector\Privatization\Rector\Class_\FinalizeClassesWithoutChildrenRector
+ * @api
  */
 class ServiceProvider extends BasicServiceProvider
 {
     /** Bootstrap any application services. */
     public function boot(): void
     {
-        Nova::serving(static function () {
+        Nova::serving(static function (): void {
             Nova::script('nova-unlayer-field', __DIR__.'/../dist/js/field.js');
         });
 

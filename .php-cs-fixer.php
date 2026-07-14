@@ -2,4 +2,4 @@
 
 use IxDFCodingStandard\PhpCsFixer\Config;
 
-return Config::create(__DIR__);
+return Config::create(__DIR__, ruleOverrides: []);
