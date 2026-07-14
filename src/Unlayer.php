@@ -17,8 +17,8 @@ class Unlayer extends Field
 {
     use SupportsDependentFields;
 
-    public const MODE_EMAIL = 'email';
-    public const MODE_WEB = 'web';
+    public const string MODE_EMAIL = 'email';
+    public const string MODE_WEB = 'web';
 
     /**
      * The field's component.
