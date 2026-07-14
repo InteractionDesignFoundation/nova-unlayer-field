@@ -12,6 +12,7 @@ use Laravel\Nova\Http\Requests\NovaRequest;
  * @phpcs:disable SlevomatCodingStandard.TypeHints.ReturnTypeHint.UselessAnnotation
  * @phpcs:disable SlevomatCodingStandard.Classes.RequireAbstractOrFinal
  * @noRector \Rector\Privatization\Rector\Class_\FinalizeClassesWithoutChildrenRector
+ * @api
  */
 class Unlayer extends Field
 {
@@ -28,7 +29,8 @@ class Unlayer extends Field
 
     /**
      * Indicates if the element should be shown on the index view.
-     * @var (callable():bool)|bool
+     * @var bool|(callable(\Laravel\Nova\Http\Requests\NovaRequest, array<array-key, mixed>|object): bool)
+     * @phpcsSuppress SlevomatCodingStandard.TypeHints.DisallowMixedTypeHint
      */
     public $showOnIndex = false;
 
@@ -60,7 +62,10 @@ class Unlayer extends Field
         ]);
     }
 
-    /** @param (callable(\Laravel\Nova\Http\Requests\NovaRequest, string, \Illuminate\Database\Eloquent\Model, string): void)|null $callback */
+    /**
+     * @param (callable(\Laravel\Nova\Http\Requests\NovaRequest, string, \Illuminate\Database\Eloquent\Model, string): void)|null $callback
+     * @psalm-external-mutation-free
+     */
     final public function savingCallback(?callable $callback): static
     {
         $this->savingCallback = $callback;
@@ -91,7 +96,10 @@ class Unlayer extends Field
         return $this->withMeta(['plugins' => $plugins]);
     }
 
-    /** Set the Code editor to display all of its contents. */
+    /**
+     * Set the Code editor to display all of its contents.
+     * @psalm-external-mutation-free
+     */
     public function fullHeight(): static
     {
         $this->height = '100%';
@@ -99,7 +107,10 @@ class Unlayer extends Field
         return $this;
     }
 
-    /** Set the visual height of the Code editor to automatic. */
+    /**
+     * Set the visual height of the Code editor to automatic.
+     * @psalm-external-mutation-free
+     */
     public function autoHeight(): static
     {
         $this->height = 'auto';
@@ -107,7 +118,10 @@ class Unlayer extends Field
         return $this;
     }
 
-    /** Set the visual height of the Unlayer editor (with units). */
+    /**
+     * Set the visual height of the Unlayer editor (with units).
+     * @psalm-external-mutation-free
+     */
     public function height(string $height): static
     {
         $this->height = $height;
@@ -120,6 +134,7 @@ class Unlayer extends Field
      * @return array<string, mixed>
      * @phpcsSuppress SlevomatCodingStandard.TypeHints.DisallowMixedTypeHint
      */
+    #[\Override]
     public function jsonSerialize(): array
     {
         return array_merge(parent::jsonSerialize(), [
@@ -136,15 +151,19 @@ class Unlayer extends Field
      * @param string $attribute
      * @return void
      */
-    protected function fillAttributeFromRequest(NovaRequest $request, $requestAttribute, $model, $attribute): void
-    {
+    #[\Override]
+    protected function fillAttributeFromRequest(
+        NovaRequest $request,
+        string $requestAttribute,
+        object $model,
+        string $attribute
+    ): void {
         if (is_callable($this->savingCallback)) {
             call_user_func($this->savingCallback, $request, $requestAttribute, $model, "{$requestAttribute}_html");
         }
 
         if ($request->exists($requestAttribute)) {
-            $attributeValue = json_decode($request->get($requestAttribute), true);
-            $model->setAttribute($attribute, $attributeValue);
+            $model->setAttribute($attribute, json_decode((string) $request->string($requestAttribute), true));
         }
     }
 

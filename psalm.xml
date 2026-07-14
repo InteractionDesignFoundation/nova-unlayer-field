@@ -11,14 +11,12 @@
 >
     <projectFiles>
         <directory name="src"/>
-        <ignoreFiles>
-            <directory name="vendor"/>
-        </ignoreFiles>
     </projectFiles>
+
     <disableExtensions>
-        <extension name="random"/>
         <extension name="redis"/>
     </disableExtensions>
+
     <plugins>
         <pluginClass class="Psalm\LaravelPlugin\Plugin">
             <experimental value="true"/>

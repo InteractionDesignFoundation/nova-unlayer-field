@@ -8,6 +8,7 @@ use Laravel\Nova\Nova;
 /**
  * @phpcs:disable SlevomatCodingStandard.Classes.RequireAbstractOrFinal
  * @noRector \Rector\Privatization\Rector\Class_\FinalizeClassesWithoutChildrenRector
+ * @api
  */
 class ServiceProvider extends BasicServiceProvider
 {

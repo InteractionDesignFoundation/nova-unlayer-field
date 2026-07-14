@@ -18,7 +18,7 @@
         "interaction-design-foundation/psalm-laravel-nova": "^0.1",
         "orchestra/testbench-core": "^10.0.2 || ^11.0",
         "phpunit/phpunit": "^12.4",
-        "psalm/plugin-laravel": "^4.14.12",
+        "psalm/plugin-laravel": "^4.14",
         "vimeo/psalm": "^7.0.0-beta19"
     },
     "repositories": [
