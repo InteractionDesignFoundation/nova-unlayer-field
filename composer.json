@@ -15,7 +15,7 @@
     },
     "require-dev": {
         "interaction-design-foundation/coding-standard": "^1.0-RC1",
-        "interaction-design-foundation/psalm-laravel-nova": "^0.1",
+        "interaction-design-foundation/psalm-laravel-nova": "^0.2",
         "orchestra/testbench-core": "^10.0.2 || ^11.0",
         "phpunit/phpunit": "^12.4",
         "psalm/plugin-laravel": "^4.14",
